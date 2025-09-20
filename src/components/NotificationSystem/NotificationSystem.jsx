@@ -20,9 +20,9 @@ const NotificationSystem = ({ notifications }) => {
 
   return (
     <div className={styles.notificationContainer}>
-      {notifications.map((notification) => (
+      {notifications.map((notification, index) => (
         <div
-          key={notification.id}
+          key={`notification.id ${index}`}
           className={`${styles.notification} ${styles[notification.type]}`}
         >
           <div className={styles.notificationIcon}>
