@@ -1,0 +1,63 @@
+.tagList {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: #f3f4f6;
+  color: #4a154b;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.tag.clickable {
+  cursor: pointer;
+}
+
+.tag.clickable:hover {
+  background-color: #e5e7eb;
+}
+
+.tag.selected {
+  background-color: #4a154b;
+  color: #ffffff;
+}
+
+/* Size variants */
+.tag.small {
+  padding: 2px 6px;
+  font-size: 11px;
+}
+
+.tag.medium {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.tag.large {
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .tagList {
+    gap: 6px;
+  }
+
+  .tag.small {
+    padding: 2px 4px;
+    font-size: 10px;
+  }
+
+  .tag.medium {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+
+  .tag.large {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}

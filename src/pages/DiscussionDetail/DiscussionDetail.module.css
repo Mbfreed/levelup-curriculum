@@ -1,0 +1,312 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.discussionCard {
+  padding: 24px;
+}
+
+.discussionHeader {
+  margin-bottom: 24px;
+}
+
+.discussionMeta {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.authorInfo,
+.timestamp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.discussionTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 16px 0;
+  line-height: 1.3;
+}
+
+.discussionTags {
+  margin-bottom: 0;
+}
+
+.discussionContent {
+  margin-bottom: 24px;
+}
+
+.contentText {
+  line-height: 1.6;
+}
+
+.paragraph {
+  margin: 0 0 16px 0;
+  color: #374151;
+}
+
+.codeBlock {
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  overflow-x: auto;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 14px;
+}
+
+.codeBlock code {
+  color: #374151;
+}
+
+.discussionActions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.replyFormCard {
+  padding: 24px;
+}
+
+.replyFormCard h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 16px 0;
+}
+
+.replyForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.replyTextarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.replyTextarea:focus {
+  outline: none;
+  border-color: #4a154b;
+  box-shadow: 0 0 0 3px rgba(74, 21, 75, 0.1);
+}
+
+.replyActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.repliesSection {
+  margin-top: 24px;
+}
+
+.repliesTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 16px 0;
+}
+
+.repliesList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.replyCard {
+  padding: 20px;
+  transition: all 0.2s ease-in-out;
+}
+
+.replyCard:hover {
+  border-color: #4a154b;
+}
+
+.acceptedReply {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+}
+
+.replyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.replyAuthor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.acceptedBadge {
+  background-color: #10b981;
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.replyTimestamp {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.replyContent {
+  margin-bottom: 16px;
+}
+
+.replyContent p {
+  margin: 0;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.replyActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.statsCard,
+.guidelinesCard {
+  padding: 20px;
+}
+
+.statsCard h3,
+.guidelinesCard h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 16px 0;
+}
+
+.statsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.guidelines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.guidelines li {
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+  padding-left: 16px;
+  position: relative;
+}
+
+.guidelines li::before {
+  content: "•";
+  color: #4a154b;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .sidebar {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .discussionTitle {
+    font-size: 24px;
+  }
+
+  .discussionMeta {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .replyHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .replyActions {
+    flex-direction: column;
+  }
+
+  .replyActions button {
+    width: 100%;
+  }
+}

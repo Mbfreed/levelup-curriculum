@@ -1,0 +1,453 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.header p {
+  font-size: 18px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.levelProgressCard {
+  padding: 32px;
+  margin-bottom: 48px;
+  background: #ffffff;
+  border: 2px solid #ffd700;
+}
+
+.levelProgressHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.levelInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.levelIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4a154b;
+  color: #ffd700;
+  border: 2px solid #ffd700;
+}
+
+.levelDetails h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #4a154b;
+  margin: 0 0 4px 0;
+}
+
+.levelDetails p {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+  font-weight: 500;
+}
+
+.progressSection {
+  margin-bottom: 24px;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a154b;
+}
+
+.progressBar {
+  width: 100%;
+  height: 12px;
+  background-color: rgba(74, 21, 75, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: #ffd700;
+  border-radius: 6px;
+  transition: width 0.3s ease-in-out;
+}
+
+.nextLevelRewards {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(74, 21, 75, 0.1);
+}
+
+.nextLevelRewards h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #4a154b;
+  margin: 0 0 12px 0;
+}
+
+.rewardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rewardItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.rewardItem svg {
+  color: #ffd700;
+}
+
+.certificatesSection {
+  margin-bottom: 48px;
+}
+
+.certificatesSection h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.certificatesSection p {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0 0 24px 0;
+}
+
+.certificatesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+.certificateCard {
+  padding: 0;
+  overflow: visible;
+}
+
+.certificateImage {
+  position: relative;
+  height: auto;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  background: #f9fafb;
+}
+
+.certificateImage > div {
+  width: 100%;
+  height: 200px;
+  position: relative;
+  z-index: 1;
+}
+
+.nftBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgba(255, 215, 0, 0.9);
+  color: #4a154b;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 20;
+}
+
+.certificateInfo {
+  padding: 24px;
+}
+
+.certificateInfo h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.certificateInfo p {
+  color: #6b7280;
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+}
+
+.certificateDetails {
+  margin-bottom: 16px;
+}
+
+.detail {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.detail strong {
+  color: #374151;
+}
+
+.nftMetadata {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.metadataToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.metadataToggle h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a154b;
+  margin: 0;
+}
+
+.nftMetadata h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a154b;
+  margin: 0 0 12px 0;
+}
+
+.attributes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.attribute {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.attributeType {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.attributeValue {
+  font-size: 13px;
+  color: #374151;
+  font-weight: 600;
+}
+
+.claimButton {
+  width: 100%;
+}
+
+.noCertificates {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px 24px;
+  color: #6b7280;
+}
+
+.noCertificates svg {
+  color: #d1d5db;
+  margin-bottom: 16px;
+}
+
+.noCertificates h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.noCertificates p {
+  margin: 0;
+}
+
+.coinPurchaseSection h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.coinPurchaseSection p {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0 0 24px 0;
+}
+
+.coinPackages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.coinPackage {
+  padding: 24px;
+  text-align: center;
+  border: 2px solid #e5e7eb;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.coinPackage:hover {
+  border-color: #ffd700;
+}
+
+.packageHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.packageHeader svg {
+  color: #ffd700;
+}
+
+.packageHeader h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.packagePrice {
+  font-size: 24px;
+  font-weight: 700;
+  color: #4a154b;
+  margin-bottom: 16px;
+}
+
+.bonus {
+  font-size: 14px;
+  color: #10b981;
+  font-weight: 500;
+}
+
+.purchaseButton {
+  width: 100%;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .header p {
+    font-size: 16px;
+  }
+
+  .levelProgressCard {
+    padding: 24px;
+  }
+
+  .levelProgressHeader {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .levelDetails h2 {
+    font-size: 28px;
+  }
+
+  .levelIcon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .certificatesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .certificateImage {
+    padding: 15px;
+  }
+
+  .certificateImage > div {
+    transform: scale(0.5);
+  }
+
+  .certificateInfo {
+    padding: 16px;
+  }
+
+  .attributes {
+    grid-template-columns: 1fr;
+  }
+
+  .coinPackages {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .levelProgressCard {
+    padding: 20px;
+  }
+
+  .levelDetails h2 {
+    font-size: 24px;
+  }
+
+  .levelIcon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .nextLevelRewards {
+    padding: 16px;
+  }
+}

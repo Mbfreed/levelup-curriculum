@@ -1,0 +1,28 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9fafb;
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+  background-color: #f9fafb;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 1024px) {
+  .content {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 12px;
+  }
+}

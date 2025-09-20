@@ -1,0 +1,149 @@
+.notificationContainer {
+  position: fixed;
+  top: 80px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 350px;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.notification:hover {
+  transform: translateX(-4px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.notificationIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.notification.success .notificationIcon {
+  background-color: #d1fae5;
+  color: #10b981;
+}
+
+.notification.error .notificationIcon {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.notification.warning .notificationIcon {
+  background-color: #fef3c7;
+  color: #f59e0b;
+}
+
+.notificationContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.notificationMessage {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.notification.success {
+  border-left: 4px solid #10b981;
+}
+
+.notification.error {
+  border-left: 4px solid #ef4444;
+}
+
+.notification.warning {
+  border-left: 4px solid #f59e0b;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.notification.slideOut {
+  animation: slideOut 0.3s ease-in forwards;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .notificationContainer {
+    top: 70px;
+    right: 16px;
+    left: 16px;
+    max-width: none;
+  }
+
+  .notification {
+    padding: 12px;
+  }
+
+  .notificationIcon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .notificationMessage {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .notificationContainer {
+    top: 60px;
+    right: 12px;
+    left: 12px;
+  }
+
+  .notification {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .notificationIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .notificationMessage {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,39 @@
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Padding variants */
+.sm {
+  padding: 16px;
+}
+
+.md {
+  padding: 24px;
+}
+
+.lg {
+  padding: 32px;
+}
+
+/* Interactive states */
+.hover:hover {
+  border-color: #4a154b;
+  transform: translateY(-1px);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  border-color: #4a154b;
+  transform: translateY(-1px);
+}
+
+.clickable:active {
+  transform: translateY(0);
+}
