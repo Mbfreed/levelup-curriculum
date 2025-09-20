@@ -428,7 +428,8 @@ const greetArrow = (name) => {
       ],
       url: "https://example.com/landing-page",
       githubUrl: "https://github.com/user/landing-page",
-      notes: "Created a modern landing page with animations and responsive design",
+      notes:
+        "Created a modern landing page with animations and responsive design",
       submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
       status: "submitted",
       needsPeerReview: true,
@@ -932,7 +933,7 @@ const greetArrow = (name) => {
     // Auto remove notification after 3 seconds
     setTimeout(() => {
       setNotifications((prev) => prev.filter((n) => n.id !== id));
-    }, 3000);
+    }, 10000);
   };
 
   const addExp = (amount, source = "") => {
