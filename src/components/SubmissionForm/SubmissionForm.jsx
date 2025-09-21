@@ -76,7 +76,7 @@ const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
-        {/* File Upload */}
+        {/* File Upload
         {submissionRequirements.type === "file" ||
           (submissionRequirements.type === "files" && (
             <div className={styles.section}>
@@ -108,10 +108,10 @@ const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
                   (Max {submissionRequirements.maxSize},{" "}
                   {submissionRequirements.maxFiles || 5} files)
                 </p>
-              </div>
+              </div> */}
 
-              {/* File List */}
-              {files.length > 0 && (
+        {/* File List */}
+        {/* {files.length > 0 && (
                 <div className={styles.fileList}>
                   {files.map((file, index) => (
                     <div key={index} className={styles.fileItem}>
@@ -132,37 +132,37 @@ const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
                 </div>
               )}
             </div>
-          ))}
+          ))} */}
 
         {/* Live URL */}
-        {submissionRequirements.requiresUrl && (
-          <div className={styles.section}>
-            <Input
-              label="Live Demo URL"
-              placeholder="https://your-project.com"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              icon={<Link size={20} />}
-              required={submissionRequirements.requiresUrl}
-              helpText="Provide a live URL where your project can be viewed"
-            />
-          </div>
-        )}
+        {/* {submissionRequirements.requiresUrl && ( */}
+        <div className={styles.section}>
+          <Input
+            label="Live Demo URL"
+            placeholder="https://your-project.com"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            icon={<Link size={20} />}
+            required={submissionRequirements.requiresUrl}
+            helpText="Provide a live URL where your project can be viewed"
+          />
+        </div>
+        {/* )} */}
 
         {/* GitHub URL */}
-        {submissionRequirements.requiresGitHub && (
-          <div className={styles.section}>
-            <Input
-              label="GitHub Repository URL"
-              placeholder="https://github.com/username/repository"
-              value={githubUrl}
-              onChange={(e) => setGithubUrl(e.target.value)}
-              icon={<Github size={20} />}
-              required={submissionRequirements.requiresGitHub}
-              helpText="Link to your GitHub repository"
-            />
-          </div>
-        )}
+        {/* {submissionRequirements.requiresGitHub && ( */}
+        <div className={styles.section}>
+          <Input
+            label="GitHub Repository URL"
+            placeholder="https://github.com/username/repository"
+            value={githubUrl}
+            onChange={(e) => setGithubUrl(e.target.value)}
+            icon={<Github size={20} />}
+            required={submissionRequirements.requiresGitHub}
+            helpText="Link to your GitHub repository"
+          />
+        </div>
+        {/* )} */}
 
         {/* Notes */}
         <div className={styles.section}>
@@ -180,24 +180,26 @@ const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
         <div className={styles.requirements}>
           <h4>Submission Requirements:</h4>
           <ul>
-            {submissionRequirements.description && (
-              <li>{submissionRequirements.description}</li>
-            )}
-            {submissionRequirements.allowedTypes && (
-              <li>
-                File types: {submissionRequirements.allowedTypes.join(", ")}
-              </li>
-            )}
-            {submissionRequirements.maxSize && (
-              <li>Max file size: {submissionRequirements.maxSize}</li>
-            )}
-            {submissionRequirements.maxFiles && (
-              <li>Max files: {submissionRequirements.maxFiles}</li>
-            )}
-            {submissionRequirements.requiresUrl && <li>Live URL required</li>}
-            {submissionRequirements.requiresGitHub && (
-              <li>GitHub repository required</li>
-            )}
+            {/* {submissionRequirements.description && ( */}
+            <li>{submissionRequirements.description}</li>
+            {/* )} */}
+            {/* {submissionRequirements.allowedTypes && ( */}
+            <li>
+              File types: {submissionRequirements.allowedTypes.join(", ")}
+            </li>
+            {/* )} */}
+            {/* {submissionRequirements.maxSize && ( */}
+            <li>Max file size: {submissionRequirements.maxSize}</li>
+            {/* )} */}
+            {/* {submissionRequirements.maxFiles && ( */}
+            <li>Max files: {submissionRequirements.maxFiles}</li>
+            {/* )} */}
+            {/* {submissionRequirements.requiresUrl &&  */}
+            <li>Live URL required</li>
+            {/* } */}
+            {/* {submissionRequirements.requiresGitHub && ( */}
+            <li>GitHub repository required</li>
+            {/* )} */}
           </ul>
         </div>
 
