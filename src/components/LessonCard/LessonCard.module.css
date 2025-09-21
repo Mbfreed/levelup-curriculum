@@ -231,6 +231,10 @@
     font-size: 12px;
   }
 
+  .lessonHtml code {
+    font-size: 10px;
+  }
+
   .submissionActions {
     flex-direction: column;
     width: 100%;
