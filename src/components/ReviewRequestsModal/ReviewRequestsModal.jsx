@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Star, ExternalLink, Github, FileText } from "lucide-react";
+import {
+  Star,
+  ExternalLink,
+  Github,
+  FileText,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import Modal from "../Modal/Modal";
 import Button from "../Button/Button";
 import styles from "./ReviewRequestsModal.module.css";
@@ -28,7 +35,9 @@ const ReviewRequestsModal = ({
     }
   };
 
-  const toggleExpanded = (requestId) => {
+  const toggleExpanded = (requestId, event) => {
+    event.preventDefault();
+    event.stopPropagation();
     setExpandedRequest(expandedRequest === requestId ? null : requestId);
   };
 
@@ -54,13 +63,17 @@ const ReviewRequestsModal = ({
                 <span className={`${styles.status} ${styles[request.status]}`}>
                   {request.status}
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => toggleExpanded(request.id)}
+                <button
+                  className={styles.expandButton}
+                  onClick={(e) => toggleExpanded(request.id, e)}
+                  title={expandedRequest === request.id ? "Collapse" : "Expand"}
                 >
-                  {expandedRequest === request.id ? "Collapse" : "Expand"}
-                </Button>
+                  {expandedRequest === request.id ? (
+                    <ChevronUp size={16} />
+                  ) : (
+                    <ChevronDown size={16} />
+                  )}
+                </button>
               </div>
             </div>
 

@@ -86,12 +86,7 @@ const Landing = () => {
                     </div>
                     <div className={styles.codeLine}>
                       <span className={styles.codeIndent}> </span>
-                      <span
-                        className={styles.codeFunction}
-                        style={{ marginLeft: "8px" }}
-                      >
-                        earnRewards
-                      </span>
+                      <span className={styles.codeFunction}>earnRewards</span>
                       <span className={styles.codeOperator}>(</span>
                       <span className={styles.codeVariable}>rewards</span>
                       <span className={styles.codeOperator}>)</span>

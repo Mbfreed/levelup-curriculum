@@ -1,11 +1,9 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { MessageCircle, Plus, Search, Filter, X } from "lucide-react";
-import Card from "../../components/Card/Card";
-import Button from "../../components/Button/Button";
-import Input from "../../components/Input/Input";
-import TagList from "../../components/TagList/TagList";
-import Modal from "../../components/Modal/Modal";
+import DiscussionControls from "../../components/Discussion/DiscussionControls";
+import DiscussionCard from "../../components/Discussion/DiscussionCard";
+import DiscussionSidebar from "../../components/Discussion/DiscussionSidebar";
+import NewDiscussionModal from "../../components/Discussion/NewDiscussionModal";
 import styles from "./Discussion.module.css";
 
 const Discussion = () => {
@@ -200,186 +198,46 @@ const Discussion = () => {
 
       <div className={styles.content}>
         <div className={styles.main}>
-          <div className={styles.controls}>
-            <div className={styles.searchSection}>
-              <Input
-                placeholder="Search discussions..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                icon={<Search size={20} />}
-                className={styles.searchInput}
-              />
-            </div>
-            <Button
-              variant="primary"
-              icon={<Plus size={20} />}
-              onClick={handleNewDiscussion}
-            >
-              New Discussion
-            </Button>
-          </div>
+          <DiscussionControls
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            onNewDiscussion={handleNewDiscussion}
+          />
 
           <div className={styles.discussionsList}>
             {filteredDiscussions.map((discussion) => (
-              <Card
+              <DiscussionCard
                 key={discussion.id}
-                className={styles.discussionCard}
-                clickable
-                onClick={() => handleDiscussionClick(discussion.id)}
-              >
-                <div className={styles.discussionContent}>
-                  <div className={styles.discussionHeader}>
-                    <h3 className={styles.discussionTitle}>
-                      {discussion.title}
-                    </h3>
-                    {discussion.isResolved && (
-                      <span className={styles.resolvedBadge}>Resolved</span>
-                    )}
-                  </div>
-
-                  <div className={styles.discussionMeta}>
-                    <span className={styles.author}>
-                      by {discussion.author}
-                    </span>
-                    <span className={styles.lastActivity}>
-                      {discussion.lastActivity}
-                    </span>
-                  </div>
-
-                  <TagList
-                    tags={discussion.tags}
-                    onTagClick={handleTagClick}
-                    selectedTag={selectedTag}
-                    clickable={true}
-                    size="medium"
-                    className={styles.discussionTags}
-                  />
-
-                  <div className={styles.discussionStats}>
-                    <div className={styles.stat}>
-                      <MessageCircle size={16} />
-                      <span>{discussion.replies} replies</span>
-                    </div>
-                    <div className={styles.stat}>
-                      <span>{discussion.views} views</span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
+                discussion={discussion}
+                onDiscussionClick={handleDiscussionClick}
+                onTagClick={handleTagClick}
+                selectedTag={selectedTag}
+              />
             ))}
           </div>
         </div>
 
-        <div className={styles.sidebar}>
-          <Card className={styles.categoriesCard}>
-            <h3>Categories</h3>
-            <div className={styles.categoriesList}>
-              {categories.map((category) => (
-                <button
-                  key={category.name}
-                  className={`${styles.categoryItem} ${
-                    category.active ? styles.active : ""
-                  }`}
-                  onClick={() => handleCategoryClick(category.name)}
-                >
-                  <span className={styles.categoryName}>{category.name}</span>
-                  <span className={styles.categoryCount}>{category.count}</span>
-                </button>
-              ))}
-            </div>
-          </Card>
-
-          <Card className={styles.guidelinesCard}>
-            <h3>Community Guidelines</h3>
-            <ul className={styles.guidelines}>
-              <li>Be respectful and constructive</li>
-              <li>Search before asking</li>
-              <li>Provide clear, detailed questions</li>
-              <li>Help others when you can</li>
-              <li>Use appropriate tags</li>
-            </ul>
-          </Card>
-        </div>
+        <DiscussionSidebar
+          categories={categories}
+          onCategoryClick={handleCategoryClick}
+        />
       </div>
 
-      {/* New Discussion Modal */}
-      <Modal
+      <NewDiscussionModal
         isOpen={showNewDiscussion}
         onClose={() => setShowNewDiscussion(false)}
-        title="Create New Discussion"
-        size="medium"
-        actions={
-          <>
-            <Button variant="ghost" onClick={() => setShowNewDiscussion(false)}>
-              Cancel
-            </Button>
-            <Button
-              variant="primary"
-              onClick={handleCreateDiscussion}
-              disabled={
-                !newDiscussionTitle.trim() || !newDiscussionContent.trim()
-              }
-            >
-              Create Discussion
-            </Button>
-          </>
-        }
-      >
-        <Input
-          label="Discussion Title"
-          placeholder="Enter a clear, descriptive title..."
-          value={newDiscussionTitle}
-          onChange={(e) => setNewDiscussionTitle(e.target.value)}
-        />
-
-        <div className={styles.modalField}>
-          <label className={styles.modalLabel}>Description</label>
-          <textarea
-            placeholder="Describe your question or topic in detail..."
-            value={newDiscussionContent}
-            onChange={(e) => setNewDiscussionContent(e.target.value)}
-            className={styles.modalTextarea}
-            rows={6}
-          />
-        </div>
-
-        <div className={styles.modalField}>
-          <label className={styles.modalLabel}>Tags</label>
-          <div className={styles.tagInputContainer}>
-            <Input
-              placeholder="Add a tag..."
-              value={newDiscussionTagInput}
-              onChange={(e) => setNewDiscussionTagInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              className={styles.tagInput}
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleAddTag}
-              disabled={!newDiscussionTagInput.trim()}
-            >
-              Add
-            </Button>
-          </div>
-
-          {newDiscussionTags.length > 0 && (
-            <div className={styles.tagsList}>
-              {newDiscussionTags.map((tag) => (
-                <span key={tag} className={styles.tag}>
-                  {tag}
-                  <button
-                    onClick={() => handleRemoveTag(tag)}
-                    className={styles.removeTag}
-                  >
-                    <X size={14} />
-                  </button>
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      </Modal>
+        onSubmit={handleCreateDiscussion}
+        title={newDiscussionTitle}
+        content={newDiscussionContent}
+        tags={newDiscussionTags}
+        tagInput={newDiscussionTagInput}
+        onTitleChange={setNewDiscussionTitle}
+        onContentChange={setNewDiscussionContent}
+        onTagInputChange={setNewDiscussionTagInput}
+        onAddTag={handleAddTag}
+        onRemoveTag={handleRemoveTag}
+        onKeyPress={handleKeyPress}
+      />
     </div>
   );
 };

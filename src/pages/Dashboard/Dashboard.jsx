@@ -1,21 +1,13 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
 import { useCourse } from "../../contexts/CourseContext";
-import {
-  Trophy,
-  Coins,
-  Flame,
-  BookOpen,
-  Clock,
-  Star,
-  TrendingUp,
-  Award,
-} from "lucide-react";
-import Card from "../../components/Card/Card";
-import Button from "../../components/Button/Button";
-import StatCard from "../../components/StatCard/StatCard";
-import ProgressBar from "../../components/ProgressBar/ProgressBar";
+import { Trophy, Coins, Flame, Star } from "lucide-react";
+import WelcomeSection from "../../components/Dashboard/WelcomeSection";
+import StatsGrid from "../../components/Dashboard/StatsGrid";
+import ContinueLearningSection from "../../components/Dashboard/ContinueLearningSection";
+import RecommendedCoursesSection from "../../components/Dashboard/RecommendedCoursesSection";
+import QuickActionsSection from "../../components/Dashboard/QuickActionsSection";
 import styles from "./Dashboard.module.css";
 
 const Dashboard = () => {
@@ -83,209 +75,23 @@ const Dashboard = () => {
 
   return (
     <div className={styles.dashboard}>
-      {/* Welcome Section */}
-      <div className={styles.welcomeSection}>
-        <h1 className={styles.welcomeTitle}>Welcome back, {user.name}! 👋</h1>
-        <p className={styles.welcomeSubtitle}>
-          Ready to continue your learning journey?
-        </p>
-      </div>
+      <WelcomeSection userName={user.name} />
 
-      {/* Stats Grid */}
-      <div className={styles.statsGrid}>
-        {stats.map((stat, index) => (
-          <StatCard
-            key={index}
-            title={stat.title}
-            value={stat.value}
-            icon={stat.icon}
-            color={stat.color}
-          />
-        ))}
-      </div>
+      <StatsGrid stats={stats} />
 
-      {/* Main Content Grid */}
       <div className={styles.contentGrid}>
-        {/* Continue Learning */}
-        <div className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Continue Learning</h2>
-            <Link to="/courses" className={styles.sectionLink}>
-              View All
-            </Link>
-          </div>
+        <ContinueLearningSection
+          enrolledCourses={enrolledCourses}
+          onContinueCourse={handleContinueCourse}
+        />
 
-          {enrolledCourses.length > 0 ? (
-            <div className={styles.courseList}>
-              {enrolledCourses.map((course) => (
-                <Card
-                  key={course.id}
-                  className={styles.courseCard}
-                  clickable
-                  onClick={() => handleContinueCourse(course.id)}
-                >
-                  <div className={styles.courseContent}>
-                    <div className={styles.courseInfo}>
-                      <h3 className={styles.courseTitle}>{course.title}</h3>
-                      <p className={styles.courseDescription}>
-                        {course.description}
-                      </p>
-                      <div className={styles.courseMeta}>
-                        <span className={styles.courseLevel}>
-                          {course.level}
-                        </span>
-                        <span className={styles.courseDuration}>
-                          <Clock size={16} />
-                          {course.duration}
-                        </span>
-                      </div>
-                    </div>
-                    <div className={styles.courseProgress}>
-                      <ProgressBar
-                        progress={course.progress}
-                        max={100}
-                        height="8px"
-                        showLabel={false}
-                        color={course.progress === 100 ? "#10b981" : "#ffd700"}
-                      />
-                      <span className={styles.progressText}>
-                        {course.progress}% Complete
-                      </span>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <Card className={styles.emptyState}>
-              <div className={styles.emptyContent}>
-                <BookOpen size={48} className={styles.emptyIcon} />
-                <h3 className={styles.emptyTitle}>No courses enrolled yet</h3>
-                <p className={styles.emptyDescription}>
-                  Start your learning journey by enrolling in a course
-                </p>
-                <Button as={Link} to="/courses">
-                  Browse Courses
-                </Button>
-              </div>
-            </Card>
-          )}
-        </div>
+        <RecommendedCoursesSection
+          recommendedCourses={recentCourses}
+          onContinueCourse={handleContinueCourse}
+          onEnrollCourse={handleEnrollCourse}
+        />
 
-        {/* Recommended Courses */}
-        <div className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Recommended for You</h2>
-            <Link to="/courses" className={styles.sectionLink}>
-              View All
-            </Link>
-          </div>
-
-          <div className={styles.courseList}>
-            {recentCourses.map((course) => (
-              <Card key={course.id} className={styles.courseCard} clickable>
-                <div className={styles.courseContent}>
-                  <div className={styles.courseInfo}>
-                    <h3 className={styles.courseTitle}>{course.title}</h3>
-                    <p className={styles.courseDescription}>
-                      {course.description}
-                    </p>
-                    <div className={styles.courseMeta}>
-                      <span className={styles.courseLevel}>{course.level}</span>
-                      <span className={styles.courseRating}>
-                        <Star size={16} />
-                        {course.rating}
-                      </span>
-                      <span className={styles.courseStudents}>
-                        {course.students} students
-                      </span>
-                    </div>
-                  </div>
-                  <div className={styles.courseActions}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        if (course.isEnrolled) {
-                          handleContinueCourse(course.id);
-                        } else {
-                          handleEnrollCourse(course.id);
-                        }
-                      }}
-                    >
-                      {course.isEnrolled ? "Continue" : "Enroll"}
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Quick Actions</h2>
-          </div>
-
-          <div className={styles.quickActionsGrid}>
-            <Card
-              className={styles.quickActionCard}
-              clickable
-              onClick={() => navigate("/courses")}
-            >
-              <div className={styles.quickActionIcon}>
-                <BookOpen size={24} />
-              </div>
-              <h3 className={styles.quickActionTitle}>Browse Courses</h3>
-              <p className={styles.quickActionDescription}>
-                Discover new courses to enhance your skills
-              </p>
-            </Card>
-
-            <Card
-              className={styles.quickActionCard}
-              clickable
-              onClick={() => navigate("/rewards")}
-            >
-              <div className={styles.quickActionIcon}>
-                <Award size={24} />
-              </div>
-              <h3 className={styles.quickActionTitle}>Claim Rewards</h3>
-              <p className={styles.quickActionDescription}>
-                Collect your earned EXP and certificates
-              </p>
-            </Card>
-
-            <Card
-              className={styles.quickActionCard}
-              clickable
-              onClick={() => navigate("/certificates")}
-            >
-              <div className={styles.quickActionIcon}>
-                <Trophy size={24} />
-              </div>
-              <h3 className={styles.quickActionTitle}>View Certificates</h3>
-              <p className={styles.quickActionDescription}>
-                Showcase your completed achievements
-              </p>
-            </Card>
-
-            <Card
-              className={styles.quickActionCard}
-              clickable
-              onClick={() => navigate("/discussion")}
-            >
-              <div className={styles.quickActionIcon}>
-                <TrendingUp size={24} />
-              </div>
-              <h3 className={styles.quickActionTitle}>Community</h3>
-              <p className={styles.quickActionDescription}>
-                Connect with fellow learners
-              </p>
-            </Card>
-          </div>
-        </div>
+        <QuickActionsSection onNavigate={navigate} />
       </div>
     </div>
   );
