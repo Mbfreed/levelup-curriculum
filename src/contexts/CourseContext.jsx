@@ -940,19 +940,20 @@ const greetArrow = (name) => {
     setUserStats((prev) => {
       const newExp = prev.exp + amount;
       const newLevel = Math.floor(newExp / 500) + 1; // 500 EXP per level
-      const leveledUp = newLevel > prev.level;
 
-      if (leveledUp) {
-        addNotification(
-          `🎉 Level Up! You're now level ${newLevel}!`,
-          "success"
-        );
-      } else if (amount > 0) {
-        addNotification(
-          `+${amount} EXP earned${source ? ` for ${source}` : ""}!`,
-          "success"
-        );
-      }
+      // const leveledUp = newLevel > prev.level;
+
+      // if (leveledUp) {
+      //   addNotification(
+      //     `🎉 Level Up! You're now level ${newLevel}!`,
+      //     "success"
+      //   );
+      // } else if (amount > 0) {
+      //   addNotification(
+      //     `+${amount} EXP earned${source ? ` for ${source}` : ""}!`,
+      //     "success"
+      //   );
+      // }
 
       return {
         ...prev,
