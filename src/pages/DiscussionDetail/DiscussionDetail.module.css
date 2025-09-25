@@ -284,11 +284,15 @@
 
 @media (max-width: 768px) {
   .container {
-    padding: 16px;
+    padding: 0;
   }
 
   .discussionTitle {
     font-size: 24px;
+  }
+
+  .sidebar {
+    display: none;
   }
 
   .discussionMeta {

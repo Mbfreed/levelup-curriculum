@@ -903,9 +903,12 @@
     gap: 8px;
   }
 
-  .progressCard,
-  .lessonsCard {
+  .progressCard {
     padding: 12px;
+  }
+
+  .lessonsCard {
+    display: none;
   }
 
   .progressCard h3,

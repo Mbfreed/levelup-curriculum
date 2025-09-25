@@ -6,34 +6,34 @@ import Card from "../Card/Card";
 import styles from "./ReviewRequestForm.module.css";
 
 const ReviewRequestForm = ({ lesson, onSubmit, onCancel }) => {
-  const [files, setFiles] = useState([]);
+  // const [files, setFiles] = useState([]);
   const [url, setUrl] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
   const [question, setQuestion] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleFileChange = (event) => {
-    const selectedFiles = Array.from(event.target.files);
-    const validFiles = selectedFiles.filter((file) => {
-      const extension = file.name.split(".").pop().toLowerCase();
-      return [
-        "html",
-        "css",
-        "js",
-        "jsx",
-        "ts",
-        "tsx",
-        "json",
-        "md",
-        "txt",
-      ].includes(extension);
-    });
-    setFiles(validFiles.slice(0, 3)); // Limit to 3 files
-  };
+  // const handleFileChange = (event) => {
+  //   const selectedFiles = Array.from(event.target.files);
+  //   const validFiles = selectedFiles.filter((file) => {
+  //     const extension = file.name.split(".").pop().toLowerCase();
+  //     return [
+  //       "html",
+  //       "css",
+  //       "js",
+  //       "jsx",
+  //       "ts",
+  //       "tsx",
+  //       "json",
+  //       "md",
+  //       "txt",
+  //     ].includes(extension);
+  //   });
+  //   setFiles(validFiles.slice(0, 3)); // Limit to 3 files
+  // };
 
-  const removeFile = (index) => {
-    setFiles(files.filter((_, i) => i !== index));
-  };
+  // const removeFile = (index) => {
+  //   setFiles(files.filter((_, i) => i !== index));
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,12 +41,12 @@ const ReviewRequestForm = ({ lesson, onSubmit, onCancel }) => {
 
     try {
       const reviewRequest = {
-        files: files.map((file) => ({
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          lastModified: file.lastModified,
-        })),
+        // files: files.map((file) => ({
+        //   name: file.name,
+        //   size: file.size,
+        //   type: file.type,
+        //   lastModified: file.lastModified,
+        // })),
         url: url.trim() || null,
         githubUrl: githubUrl.trim() || null,
         question: question.trim() || null,
@@ -90,7 +90,7 @@ const ReviewRequestForm = ({ lesson, onSubmit, onCancel }) => {
         </div>
 
         {/* File Upload */}
-        <div className={styles.section}>
+        {/* <div className={styles.section}>
           <label className={styles.label}>
             <Upload size={20} />
             Upload Files (Optional)
@@ -115,10 +115,10 @@ const ReviewRequestForm = ({ lesson, onSubmit, onCancel }) => {
               Upload your code files, screenshots, or any relevant materials
               (Max 3 files)
             </p>
-          </div>
+          </div> */}
 
-          {/* File List */}
-          {files.length > 0 && (
+        {/* File List */}
+        {/* {files.length > 0 && (
             <div className={styles.fileList}>
               {files.map((file, index) => (
                 <div key={index} className={styles.fileItem}>
@@ -138,7 +138,7 @@ const ReviewRequestForm = ({ lesson, onSubmit, onCancel }) => {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
 
         {/* Live URL */}
         <div className={styles.section}>

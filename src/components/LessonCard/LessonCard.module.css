@@ -175,6 +175,19 @@
   color: #065f46;
 }
 
+.completedHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4a154b;
+  /* color: #065f46; */
+}
+
+.completedHeader span {
+  font-weight: 600;
+  font-size: 18px;
+}
+
 .locked {
   background-color: #f3f4f6;
   color: #6b7280;

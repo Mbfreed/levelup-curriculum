@@ -270,6 +270,10 @@
     padding: 16px;
   }
 
+  .sidebar {
+    display: none;
+  }
+
   .discussionHeader {
     flex-direction: column;
     align-items: flex-start;

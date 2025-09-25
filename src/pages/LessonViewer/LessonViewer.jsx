@@ -128,15 +128,10 @@ const LessonViewer = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.breadcrumb}>
+          <span className={styles.breadcrumbSeparator}>←</span>
           <Link to="/courses" className={styles.breadcrumbLink}>
-            Courses
+            Back
           </Link>
-          <span className={styles.breadcrumbSeparator}>→</span>
-          <Link to={`/courses/${courseId}`} className={styles.breadcrumbLink}>
-            {course.title}
-          </Link>
-          <span className={styles.breadcrumbSeparator}>→</span>
-          <span className={styles.breadcrumbCurrent}>{lesson.title}</span>
         </div>
         <h1 className={styles.title}>{lesson.title}</h1>
         <p className={styles.description}>{lesson.description}</p>

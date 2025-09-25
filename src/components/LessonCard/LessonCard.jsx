@@ -13,7 +13,7 @@ import styles from "./LessonCard.module.css";
 
 const LessonCard = ({
   lesson,
-  courseId,
+  // courseId,
   submissions = [],
   reviewRequests = [],
   onMarkComplete,
@@ -76,7 +76,10 @@ const LessonCard = ({
         {/* Show completion banner if completed */}
         {lesson.isCompleted && (
           <div className={styles.completedContent}>
-            <h4>✅ Lesson Completed</h4>
+            <div className={styles.completedHeader}>
+              <CheckCircle size={20} className={styles.completedIcon} />
+              <span>Lesson Completed</span>
+            </div>
             <p>
               Great job! You've completed this lesson. You can review the
               content above or move on to the next lesson.

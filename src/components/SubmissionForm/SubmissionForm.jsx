@@ -180,26 +180,8 @@ const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
         <div className={styles.requirements}>
           <h4>Submission Requirements:</h4>
           <ul>
-            {/* {submissionRequirements.description && ( */}
-            <li>{submissionRequirements.description}</li>
-            {/* )} */}
-            {/* {submissionRequirements.allowedTypes && ( */}
-            <li>
-              File types: {submissionRequirements.allowedTypes.join(", ")}
-            </li>
-            {/* )} */}
-            {/* {submissionRequirements.maxSize && ( */}
-            <li>Max file size: {submissionRequirements.maxSize}</li>
-            {/* )} */}
-            {/* {submissionRequirements.maxFiles && ( */}
-            <li>Max files: {submissionRequirements.maxFiles}</li>
-            {/* )} */}
-            {/* {submissionRequirements.requiresUrl &&  */}
             <li>Live URL required</li>
-            {/* } */}
-            {/* {submissionRequirements.requiresGitHub && ( */}
             <li>GitHub repository required</li>
-            {/* )} */}
           </ul>
         </div>
 
