@@ -12,34 +12,54 @@ const SearchAndFilter = ({
   children,
   placeholder = "Search...",
   className = "",
+  inlineFilters = false,
 }) => {
   return (
-    <div className={`${styles.container} ${className}`}>
-      <div className={styles.searchSection}>
-        <Input
-          placeholder={placeholder}
-          value={searchTerm}
-          onChange={onSearchChange}
-          icon={<Search size={20} />}
-          className={styles.searchInput}
-        />
-      </div>
+    <div className={`${styles.container} ${inlineFilters ? styles.inlineContainer : ''} ${className}`}>
+      {inlineFilters ? (
+        <>
+          <div className={styles.searchSection}>
+            <Input
+              placeholder={placeholder}
+              value={searchTerm}
+              onChange={onSearchChange}
+              icon={<Search size={20} />}
+              className={styles.searchInput}
+            />
+          </div>
+          <div className={styles.filtersInline}>
+            {children}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className={styles.searchSection}>
+            <Input
+              placeholder={placeholder}
+              value={searchTerm}
+              onChange={onSearchChange}
+              icon={<Search size={20} />}
+              className={styles.searchInput}
+            />
+          </div>
 
-      {onToggleFilters && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onToggleFilters}
-          icon={
-            showFilters ? <ChevronUp size={16} /> : <ChevronDown size={16} />
-          }
-          className={styles.filterButton}
-        >
-          Filters
-        </Button>
+          {onToggleFilters && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onToggleFilters}
+              icon={
+                showFilters ? <ChevronUp size={16} /> : <ChevronDown size={16} />
+              }
+              className={styles.filterButton}
+            >
+              Filters
+            </Button>
+          )}
+
+          {children}
+        </>
       )}
-
-      {children}
     </div>
   );
 };

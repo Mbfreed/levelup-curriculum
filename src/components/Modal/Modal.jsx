@@ -16,7 +16,7 @@ const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalOverlay}>
       <Card
         className={`${styles.modal} ${styles[size]} ${className}`}
         onClick={(e) => e.stopPropagation()}

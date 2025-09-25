@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCourse } from "../../contexts/CourseContext";
 import {
@@ -25,6 +25,13 @@ const CourseCatalog = () => {
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
   const [showFilters, setShowFilters] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth > 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const levels = ["all", "Beginner", "Intermediate", "Advanced"];
   const sortOptions = [
@@ -91,10 +98,11 @@ const CourseCatalog = () => {
         searchTerm={searchTerm}
         onSearchChange={(e) => setSearchTerm(e.target.value)}
         showFilters={showFilters}
-        onToggleFilters={toggleFilters}
+        onToggleFilters={isDesktop ? null : toggleFilters}
         placeholder="Search courses, topics, or skills..."
+        inlineFilters={isDesktop}
       >
-        {showFilters && (
+        {(isDesktop || showFilters) && (
           <div className={styles.filterSection}>
             <div className={styles.filterGroup}>
               <label className={styles.filterLabel}>Level</label>
