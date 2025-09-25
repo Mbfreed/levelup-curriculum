@@ -1,4 +1,0 @@
-- [x] Modify SearchAndFilter.jsx to add `inlineFilters` prop for desktop layout
-- [x] Update SearchAndFilter.module.css to support inline filters layout
-- [x] Update CourseCatalog.jsx to detect desktop screen size and conditionally show filters inline without button
-- [x] Test the changes to ensure desktop shows filters side by side, mobile unchanged
