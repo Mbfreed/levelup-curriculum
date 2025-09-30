@@ -1,19 +1,42 @@
 {
-  "Web-Development-Fundamentals": {
-    "title": "Web Development",
-    "description": "Learn the fundamentals of web development, including HTML, CSS, and JavaScript. Build responsive websites and web applications from scratch.",
-    "image": "web-development.jpg",
-    "url": "/courses/web-development",
-    "modules": {
-      "HTML-Fundamentals": {
-        "title": "HTML Fundamentals",
-        "description": "Learn the basics of HTML, the standard markup language for creating web pages.",
-        "lessons": [
-          "Introduction to HTML",
-          "HTML Elements and Attributes",
-          "Creating Links and Lists"
-        ]
-      }
+  "courses": [
+    {
+      "id": "1",
+      "title": "Web Development Fundamentals",
+      "description": "Learn the fundamentals of web development, including HTML, CSS, and JavaScript. Build responsive websites and web applications from scratch.",
+      "image": "web-development.jpg",
+      "tags": ["Html", "Web Development", "CSS"],
+      "price": 50,
+      "rating": 5,
+      "duration": "8 weeks",
+      "thumbnail": "/api/placeholder/300/200",
+      "url": "/courses/web-development-fundamentals",
+      "totalLessons": 7,
+      "level": "Beginner",
+      "modules": [
+        {
+          "1d": "1",
+          "title": "HTML Fundamentals",
+          "description": "Learn the basics of HTML, the standard markup language for creating web pages.",
+          "lessons": [
+            {
+              "id": "1",
+              "title": "Getting Started with HTML",
+              "courseContent": "./courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
+            },
+            {
+              "id": "2",
+              "title": "HTML Elements and Structure",
+              "courseContent": "./courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
+            },
+            {
+              "id": "3",
+              "title": "Creating Links and Lists",
+              "courseContent": "./courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
+            }
+          ]
+        }
+      ]
     }
-  }
+  ]
 }

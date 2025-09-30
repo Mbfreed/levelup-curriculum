@@ -17,20 +17,21 @@ import Input from "../../components/Input/Input";
 import SearchAndFilter from "../../components/SearchAndFilter/SearchAndFilter";
 import TagList from "../../components/TagList/TagList";
 import styles from "./CourseCatalog.module.css";
+import coursess from "../../courses.json";
 
 const CourseCatalog = () => {
-  const { courses, enrollInCourse, getAllLessons } = useCourse();
+  // const { courses, enrollInCourse, getAllLessons } = useCourse();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
   const [showFilters, setShowFilters] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
-
+  const coursesData = coursess.courses;
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth > 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const levels = ["all", "Beginner", "Intermediate", "Advanced"];
@@ -41,7 +42,7 @@ const CourseCatalog = () => {
     { value: "price", label: "Price" },
   ];
 
-  const filteredCourses = courses
+  const filteredCourses = coursesData
     .filter((course) => {
       const matchesSearch =
         course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -71,7 +72,7 @@ const CourseCatalog = () => {
     });
 
   const handleEnroll = (courseId) => {
-    enrollInCourse(courseId);
+    // enrollInCourse(courseId);
     navigate(`/courses/${courseId}`);
   };
 
@@ -141,8 +142,8 @@ const CourseCatalog = () => {
       <div className={styles.results}>
         <div className={styles.resultsHeader}>
           <h2 className={styles.resultsTitle}>
-            {filteredCourses.length} Course
-            {filteredCourses.length !== 1 ? "s" : ""} Found
+            {coursesData.length} Course
+            {coursesData.length !== 1 ? "s" : ""} Found
           </h2>
         </div>
 
@@ -182,11 +183,11 @@ const CourseCatalog = () => {
                   </div>
                   <div className={styles.metaItem}>
                     <BookOpen size={16} />
-                    <span>{getAllLessons(course).length} lessons</span>
+                    <span>{10} lessons</span>
                   </div>
                   <div className={styles.metaItem}>
                     <Users size={16} />
-                    <span>{course.students.toLocaleString()}</span>
+                    <span>{10}</span>
                   </div>
                 </div>
 

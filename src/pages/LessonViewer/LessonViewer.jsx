@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useCourse } from "../../contexts/CourseContext";
 import {
@@ -25,6 +25,7 @@ import ReviewRequestsModal from "../../components/ReviewRequestsModal/ReviewRequ
 import SubmissionsModal from "../../components/SubmissionsModal/SubmissionsModal";
 import Modal from "../../components/Modal/Modal";
 import styles from "./LessonViewer.module.css";
+import coursesData from "../../courses.json";
 
 const LessonViewer = () => {
   const { courseId, lessonId } = useParams();
@@ -48,6 +49,10 @@ const LessonViewer = () => {
   const [showReviewRequests, setShowReviewRequests] = useState(false);
   const [showSubmissions, setShowSubmissions] = useState(false);
   const [expandedModules, setExpandedModules] = useState({});
+
+  useEffect(() => {
+    console.log("Courses data:", coursesData);
+  }, []);
 
   const handleMarkComplete = () => {
     if (!lesson.isCompleted) {
