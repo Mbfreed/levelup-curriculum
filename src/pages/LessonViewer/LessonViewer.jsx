@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useCourse } from "../../contexts/CourseContext";
 import {
@@ -26,13 +26,11 @@ import SubmissionsModal from "../../components/SubmissionsModal/SubmissionsModal
 import Modal from "../../components/Modal/Modal";
 import styles from "./LessonViewer.module.css";
 import courses from "../../courses.json";
-import { MarkdownLoader } from "../../components/MarkdownLoader/MarkdownLoader";
 
 const LessonViewer = () => {
   const { courseId, lessonId } = useParams();
   const {
-    getCourseById,
-    getLessonById,
+    // getLessonById,
     completeLesson,
     unlockNextLesson,
     submitAssignment,
@@ -43,28 +41,17 @@ const LessonViewer = () => {
   } = useCourse();
   const navigate = useNavigate();
 
-  // const course = getCourseById(courseId);
-  const lesson = getLessonById(courseId, lessonId);
+  // const lesson = getLessonById(courseId, lessonId);
   const [showSubmissionForm, setShowSubmissionForm] = useState(false);
   const [showReviewRequestForm, setShowReviewRequestForm] = useState(false);
   const [showReviewRequests, setShowReviewRequests] = useState(false);
   const [showSubmissions, setShowSubmissions] = useState(false);
   const [expandedModules, setExpandedModules] = useState({});
-  const [lessonContent, setLessonContent] = useState("");
-
   const coursesData = courses.courses;
   const course = coursesData.find((c) => c.id === courseId);
-  if (course) {
-    for (const module in coursesData.module) {
-      const lesson = module.find((l) => l.id === lessonId);
-      if (lesson) {
-        setLessonContent(lesson);
-        break;
-      }
-    }
-  }
-
-  // useEffect(() => {}, []);
+  const lesson = course
+    ? course.modules.flatMap((m) => m.lessons).find((l) => l.id === lessonId)
+    : null;
 
   const handleMarkComplete = () => {
     if (!lesson.isCompleted) {
@@ -156,7 +143,6 @@ const LessonViewer = () => {
 
       <div className={styles.content}>
         <div className={styles.lessonContent}>
-          <MarkdownLoader path={lessonContent.courseContent} />
           <LessonCard
             lesson={lesson}
             courseId={courseId}

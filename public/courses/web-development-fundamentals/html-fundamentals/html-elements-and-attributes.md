@@ -1,5 +1,9 @@
-# Welcome to Html
+# Introduction to Html
 
 ---
 
-### Introduction to html
+### Key Concepts
+
+- Elements: **HTML elements are the building blocks of HTML pages**
+- Tags: HTML **tags label pieces of content**
+- Attributes: **HTML attributes provide additional information about elements**

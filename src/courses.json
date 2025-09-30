@@ -91,8 +91,8 @@
               "id": "1-1",
               "title": "Getting Started with HTML",
               "duration": "45 min",
-              "isCompleted": true,
-              "isLocked": true,
+              "isCompleted": false,
+              "isLocked": false,
               "type": "lessons",
               "courseContent": "/courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
             },
@@ -126,7 +126,7 @@
               "title": "Getting Started with CSS",
               "duration": "10 min",
               "isCompleted": false,
-              "isLocked": false,
+              "isLocked": true,
               "type": "assignment",
               "courseContent": "./courses/web-development-fundamentals/css-styling/intro-to-css.md"
             }

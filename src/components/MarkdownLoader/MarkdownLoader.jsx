@@ -9,15 +9,10 @@ export const MarkdownLoader = ({ path }) => {
     fetch(path)
       .then((response) => response.text())
       .then((text) => {
-        console.log(text);
         setMarkdownContent(text);
       })
       .catch((err) => console.error(err));
   }, [path]);
 
-  return (
-    <Card>
-      <ReactMarkdown>{markdownContent}</ReactMarkdown>;
-    </Card>
-  );
+  return <ReactMarkdown>{markdownContent}</ReactMarkdown>;
 };

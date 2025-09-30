@@ -10,6 +10,7 @@ import {
 import Card from "../Card/Card";
 import Button from "../Button/Button";
 import styles from "./LessonCard.module.css";
+import { MarkdownLoader } from "../MarkdownLoader/MarkdownLoader";
 
 const LessonCard = ({
   lesson,
@@ -44,11 +45,8 @@ const LessonCard = ({
       </div>
 
       <div className={styles.lessonContent}>
-        {lesson.content ? (
-          <div
-            dangerouslySetInnerHTML={{ __html: lesson.content }}
-            className={styles.lessonHtml}
-          />
+        {lesson.courseContent ? (
+          <MarkdownLoader path={lesson.courseContent} />
         ) : (
           <div>
             <h4>📚 Learning Materials</h4>
