@@ -13,6 +13,7 @@
       "url": "/courses/web-development-fundamentals",
       "totalLessons": 7,
       "level": "Beginner",
+      "isEnrolled": false,
       "modules": [
         {
           "1d": "1",
@@ -22,16 +23,25 @@
             {
               "id": "1",
               "title": "Getting Started with HTML",
+              "duration": "45 min",
+              "isCompleted": true,
+              "isLocked": true,
               "courseContent": "./courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
             },
             {
               "id": "2",
               "title": "HTML Elements and Structure",
+              "duration": "20 min",
+              "isCompleted": false,
+              "isLocked": true,
               "courseContent": "./courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
             },
             {
               "id": "3",
               "title": "Creating Links and Lists",
+              "duration": "15 min",
+              "isCompleted": false,
+              "isLocked": true,
               "courseContent": "./courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
             }
           ]

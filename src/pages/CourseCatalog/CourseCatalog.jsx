@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCourse } from "../../contexts/CourseContext";
+// import { useCourse } from "../../contexts/CourseContext";
 import {
   Search,
   Filter,
@@ -17,7 +17,7 @@ import Input from "../../components/Input/Input";
 import SearchAndFilter from "../../components/SearchAndFilter/SearchAndFilter";
 import TagList from "../../components/TagList/TagList";
 import styles from "./CourseCatalog.module.css";
-import coursess from "../../courses.json";
+import courses from "../../courses.json";
 
 const CourseCatalog = () => {
   // const { courses, enrollInCourse, getAllLessons } = useCourse();
@@ -27,7 +27,7 @@ const CourseCatalog = () => {
   const [sortBy, setSortBy] = useState("popular");
   const [showFilters, setShowFilters] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
-  const coursesData = coursess.courses;
+  const coursesData = courses.courses;
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth > 768);
     window.addEventListener("resize", handleResize);

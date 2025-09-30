@@ -19,6 +19,7 @@ import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import ModuleList from "../../components/ModuleList/ModuleList";
 import styles from "./CourseDetail.module.css";
+import courses from "../../courses.json";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
@@ -26,7 +27,9 @@ const CourseDetail = () => {
   const navigate = useNavigate();
   const [expandedModules, setExpandedModules] = useState({});
 
-  const course = getCourseById(courseId);
+  // const course = getCourseById(courseId);
+  const coursesData = courses.courses;
+  const course = coursesData.find((c) => c.id === courseId);
 
   if (!course) {
     return (
@@ -91,11 +94,11 @@ const CourseDetail = () => {
             </div>
             <div className={styles.metaItem}>
               <BookOpen size={20} />
-              <span>{getAllLessons(course).length} lessons</span>
+              <span>{10} lessons</span>
             </div>
             <div className={styles.metaItem}>
               <Users size={20} />
-              <span>{course.students} students</span>
+              <span>{10} students</span>
             </div>
             <div className={styles.metaItem}>
               <Star size={20} />
