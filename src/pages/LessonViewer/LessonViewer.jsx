@@ -25,7 +25,8 @@ import ReviewRequestsModal from "../../components/ReviewRequestsModal/ReviewRequ
 import SubmissionsModal from "../../components/SubmissionsModal/SubmissionsModal";
 import Modal from "../../components/Modal/Modal";
 import styles from "./LessonViewer.module.css";
-import coursesData from "../../courses.json";
+import courses from "../../courses.json";
+import { MarkdownLoader } from "../../components/MarkdownLoader/MarkdownLoader";
 
 const LessonViewer = () => {
   const { courseId, lessonId } = useParams();
@@ -42,17 +43,28 @@ const LessonViewer = () => {
   } = useCourse();
   const navigate = useNavigate();
 
-  const course = getCourseById(courseId);
+  // const course = getCourseById(courseId);
   const lesson = getLessonById(courseId, lessonId);
   const [showSubmissionForm, setShowSubmissionForm] = useState(false);
   const [showReviewRequestForm, setShowReviewRequestForm] = useState(false);
   const [showReviewRequests, setShowReviewRequests] = useState(false);
   const [showSubmissions, setShowSubmissions] = useState(false);
   const [expandedModules, setExpandedModules] = useState({});
+  const [lessonContent, setLessonContent] = useState("");
 
-  useEffect(() => {
-    console.log("Courses data:", coursesData);
-  }, []);
+  const coursesData = courses.courses;
+  const course = coursesData.find((c) => c.id === courseId);
+  if (course) {
+    for (const module in coursesData.module) {
+      const lesson = module.find((l) => l.id === lessonId);
+      if (lesson) {
+        setLessonContent(lesson);
+        break;
+      }
+    }
+  }
+
+  // useEffect(() => {}, []);
 
   const handleMarkComplete = () => {
     if (!lesson.isCompleted) {
@@ -144,6 +156,7 @@ const LessonViewer = () => {
 
       <div className={styles.content}>
         <div className={styles.lessonContent}>
+          <MarkdownLoader path={lessonContent.courseContent} />
           <LessonCard
             lesson={lesson}
             courseId={courseId}

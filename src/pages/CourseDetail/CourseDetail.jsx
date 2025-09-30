@@ -23,7 +23,7 @@ import courses from "../../courses.json";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
-  const { getCourseById, enrollInCourse, getAllLessons } = useCourse();
+  const { enrollInCourse, getAllLessons } = useCourse();
   const navigate = useNavigate();
   const [expandedModules, setExpandedModules] = useState({});
 

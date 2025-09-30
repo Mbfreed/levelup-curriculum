@@ -21,28 +21,114 @@
           "description": "Learn the basics of HTML, the standard markup language for creating web pages.",
           "lessons": [
             {
-              "id": "1",
+              "id": "1-1",
               "title": "Getting Started with HTML",
               "duration": "45 min",
               "isCompleted": true,
               "isLocked": true,
-              "courseContent": "./courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
+              "type": "lessons",
+              "courseContent": "/courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
             },
             {
-              "id": "2",
+              "id": "1-2",
               "title": "HTML Elements and Structure",
               "duration": "20 min",
               "isCompleted": false,
               "isLocked": true,
-              "courseContent": "./courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
+              "type": "lessons",
+              "courseContent": "/courses/web-development-fundamentals/html-fundamentals/html-form-assignment.md"
             },
             {
-              "id": "3",
+              "id": "1-3",
               "title": "Creating Links and Lists",
               "duration": "15 min",
               "isCompleted": false,
               "isLocked": true,
-              "courseContent": "./courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
+              "type": "assignment",
+              "courseContent": "/courses/web-development-fundamentals/html-fundamentals/introduction-to-html.md"
+            }
+          ]
+        },
+        {
+          "1d": "2",
+          "title": "CSS Fundamentals",
+          "description": "Learn the basics of CSS, the standard tool for styling web pages.",
+          "lessons": [
+            {
+              "id": "2-1",
+              "title": "Getting Started with CSS",
+              "duration": "10 min",
+              "isCompleted": false,
+              "isLocked": false,
+              "type": "assignment",
+              "courseContent": "./courses/web-development-fundamentals/css-styling/intro-to-css.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Data Science Basics",
+      "description": "An introductory course to Data Science covering essential concepts, tools, and techniques used in the field. Learn about data analysis, visualization, and machine learning.",
+      "image": "data-science.jpg",
+      "tags": ["Data Science", "Python", "Machine Learning"],
+      "price": 0,
+      "rating": 4.1,
+      "duration": "8 weeks",
+      "thumbnail": "/api/placeholder/300/200",
+      "url": "/courses/web-development-fundamentals",
+      "totalLessons": 12,
+      "level": "Intermediate",
+      "isEnrolled": true,
+      "modules": [
+        {
+          "1d": "1",
+          "title": "HTML Fundamentals",
+          "description": "Learn the basics of HTML, the standard markup language for creating web pages.",
+          "lessons": [
+            {
+              "id": "1-1",
+              "title": "Getting Started with HTML",
+              "duration": "45 min",
+              "isCompleted": true,
+              "isLocked": true,
+              "type": "lessons",
+              "courseContent": "/courses/web-development-fundamentals/html-fundamentals/html-elements-and-attributes.md"
+            },
+            {
+              "id": "1-2",
+              "title": "HTML Elements and Structure",
+              "duration": "20 min",
+              "isCompleted": false,
+              "isLocked": true,
+              "type": "lessons",
+              "courseContent": "/courses/web-development-fundamentals/html-fundamentals/html-form-assignment.md"
+            },
+            {
+              "id": "1-3",
+              "title": "Creating Links and Lists",
+              "duration": "15 min",
+              "isCompleted": false,
+              "isLocked": true,
+              "type": "assignment",
+              "courseContent": "/courses/web-development-fundamentals/html-fundamentals/introduction-to-html.md"
+            }
+          ]
+        },
+        {
+          "1d": "2",
+          "title": "CSS Fundamentals",
+          "description": "Learn the basics of CSS, the standard tool for styling web pages.",
+          "lessons": [
+            {
+              "id": "2-1",
+              "title": "Getting Started with CSS",
+              "duration": "10 min",
+              "isCompleted": false,
+              "isLocked": false,
+              "type": "assignment",
+              "courseContent": "./courses/web-development-fundamentals/css-styling/intro-to-css.md"
             }
           ]
         }
