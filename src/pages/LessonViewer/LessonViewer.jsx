@@ -25,12 +25,13 @@ import ReviewRequestsModal from "../../components/ReviewRequestsModal/ReviewRequ
 import SubmissionsModal from "../../components/SubmissionsModal/SubmissionsModal";
 import Modal from "../../components/Modal/Modal";
 import styles from "./LessonViewer.module.css";
-import courses from "../../courses.json";
+// import courses from "../../courses.json";
 
 const LessonViewer = () => {
   const { courseId, lessonId } = useParams();
   const {
-    // getLessonById,
+    getCourseById,
+    getLessonById,
     completeLesson,
     unlockNextLesson,
     submitAssignment,
@@ -41,17 +42,18 @@ const LessonViewer = () => {
   } = useCourse();
   const navigate = useNavigate();
 
-  // const lesson = getLessonById(courseId, lessonId);
+  const course = getCourseById(courseId);
+  const lesson = getLessonById(courseId, lessonId);
   const [showSubmissionForm, setShowSubmissionForm] = useState(false);
   const [showReviewRequestForm, setShowReviewRequestForm] = useState(false);
   const [showReviewRequests, setShowReviewRequests] = useState(false);
   const [showSubmissions, setShowSubmissions] = useState(false);
   const [expandedModules, setExpandedModules] = useState({});
-  const coursesData = courses.courses;
-  const course = coursesData.find((c) => c.id === courseId);
-  const lesson = course
-    ? course.modules.flatMap((m) => m.lessons).find((l) => l.id === lessonId)
-    : null;
+  // const coursesData = courses.courses;
+  // const course = coursesData.find((c) => c.id === courseId);
+  // const lesson = course
+  //   ? course.modules.flatMap((m) => m.lessons).find((l) => l.id === lessonId)
+  //   : null;
 
   const handleMarkComplete = () => {
     if (!lesson.isCompleted) {
@@ -132,8 +134,8 @@ const LessonViewer = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.breadcrumb}>
-          <span className={styles.breadcrumbSeparator}>←</span>
           <Link to="/courses" className={styles.breadcrumbLink}>
+            <span className={styles.breadcrumbSeparator}>←</span>
             Back
           </Link>
         </div>

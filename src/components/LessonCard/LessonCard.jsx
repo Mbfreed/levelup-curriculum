@@ -45,8 +45,8 @@ const LessonCard = ({
       </div>
 
       <div className={styles.lessonContent}>
-        {lesson.courseContent ? (
-          <MarkdownLoader path={lesson.courseContent} />
+        {lesson.content ? (
+          <MarkdownLoader path={lesson.content} />
         ) : (
           <div>
             <h4>📚 Learning Materials</h4>
