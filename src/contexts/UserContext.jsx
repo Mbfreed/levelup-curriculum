@@ -100,6 +100,8 @@ export const UserProvider = ({ children }) => {
         coins: 0,
         streak: 0,
         joinedDate: user.metadata.creationTime,
+        totalLessonsCompleted: 0,
+        totalCoursesCompleted: 0,
       };
 
       console.log("User is Registered successfully");

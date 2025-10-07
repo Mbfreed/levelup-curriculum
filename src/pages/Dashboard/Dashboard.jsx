@@ -20,7 +20,7 @@ import styles from "./Dashboard.module.css";
 
 const Dashboard = () => {
   const { user } = useUser();
-  const { courses, enrollInCourse, userStats } = useCourse();
+  const { courses, enrollInCourse } = useCourse();
   const navigate = useNavigate();
 
   const enrolledCourses = courses.filter((course) => course.isEnrolled);
@@ -57,25 +57,25 @@ const Dashboard = () => {
   const stats = [
     {
       title: "Current Level",
-      value: userStats.level,
+      value: user.level,
       icon: Trophy,
       color: "#ffd700",
     },
     {
       title: "Total EXP",
-      value: userStats.exp.toLocaleString(),
+      value: user.exp.toLocaleString(),
       icon: Star,
       color: "#4a154b",
     },
     {
       title: "Platform Coins",
-      value: userStats.coins,
+      value: user.coins,
       icon: Coins,
       color: "#ffd700",
     },
     {
       title: "Learning Streak",
-      value: `${userStats.streak} days`,
+      value: `${user.streak} days`,
       icon: Flame,
       color: "#ef4444",
     },
@@ -85,7 +85,7 @@ const Dashboard = () => {
     <div className={styles.dashboard}>
       {/* Welcome Section */}
       <div className={styles.welcomeSection}>
-        <h1 className={styles.welcomeTitle}>Welcome back, {user.name}! 👋</h1>
+        <h1 className={styles.welcomeTitle}>Welcome back, {user.name}! </h1>
         <p className={styles.welcomeSubtitle}>
           Ready to continue your learning journey?
         </p>

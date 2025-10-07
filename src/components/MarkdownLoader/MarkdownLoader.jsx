@@ -4,15 +4,17 @@ import Card from "../Card/Card";
 
 export const MarkdownLoader = ({ path }) => {
   const [markdownContent, setMarkdownContent] = useState("");
+  const absolutePath = new URL(path, import.meta.url).href;
 
   useEffect(() => {
-    fetch(path)
+    console.log("Fetching markdown from:", absolutePath);
+    fetch(absolutePath)
       .then((response) => response.text())
       .then((text) => {
         setMarkdownContent(text);
       })
       .catch((err) => console.error(err));
-  }, [path]);
+  }, [absolutePath]);
 
   return <ReactMarkdown>{markdownContent}</ReactMarkdown>;
 };

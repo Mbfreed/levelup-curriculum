@@ -233,12 +233,15 @@ export const CourseProvider = ({ children }) => {
     },
   ]);
 
+  const dataUrl = new URL("/src/courses.json", import.meta.url).href;
+
   useEffect(() => {
-    fetch("/courses.json")
+    console.log("Fetching courses from:", dataUrl);
+    fetch(dataUrl)
       .then((res) => res.json())
       .then((data) => setCourses(data.courses))
       .catch(console.error);
-  }, []);
+  }, [dataUrl]);
 
   // Helper function to get all lessons from a course
   const getAllLessons = (course) => {
