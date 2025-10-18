@@ -6,37 +6,37 @@ import Card from "../Card/Card";
 import styles from "./SubmissionForm.module.css";
 
 const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
-  const [files, setFiles] = useState([]);
+  // const [files, setFiles] = useState([]);
   const [url, setUrl] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
   const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleFileChange = (event) => {
-    const selectedFiles = Array.from(event.target.files);
-    const { allowedTypes, maxSize, maxFiles } = lesson.submissionRequirements;
+  // const handleFileChange = (event) => {
+  //   const selectedFiles = Array.from(event.target.files);
+  //   const { allowedTypes, maxSize, maxFiles } = lesson.submissionRequirements;
 
-    // Validate file types
-    const validFiles = selectedFiles.filter((file) => {
-      const extension = file.name.split(".").pop().toLowerCase();
-      return allowedTypes.includes(extension);
-    });
+  //   // Validate file types
+  //   const validFiles = selectedFiles.filter((file) => {
+  //     const extension = file.name.split(".").pop().toLowerCase();
+  //     return allowedTypes.includes(extension);
+  //   });
 
-    // Validate file size
-    const maxSizeBytes = parseInt(maxSize) * 1024 * 1024; // Convert MB to bytes
-    const sizeValidFiles = validFiles.filter(
-      (file) => file.size <= maxSizeBytes
-    );
+  //   // Validate file size
+  //   const maxSizeBytes = parseInt(maxSize) * 1024 * 1024; // Convert MB to bytes
+  //   const sizeValidFiles = validFiles.filter(
+  //     (file) => file.size <= maxSizeBytes
+  //   );
 
-    // Limit number of files
-    const finalFiles = sizeValidFiles.slice(0, maxFiles || 5);
+  //   // Limit number of files
+  //   const finalFiles = sizeValidFiles.slice(0, maxFiles || 5);
 
-    setFiles(finalFiles);
-  };
+  //   setFiles(finalFiles);
+  // };
 
-  const removeFile = (index) => {
-    setFiles(files.filter((_, i) => i !== index));
-  };
+  // const removeFile = (index) => {
+  //   setFiles(files.filter((_, i) => i !== index));
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,12 +44,12 @@ const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
 
     try {
       const submission = {
-        files: files.map((file) => ({
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          lastModified: file.lastModified,
-        })),
+        // files: files.map((file) => ({
+        //   name: file.name,
+        //   size: file.size,
+        //   type: file.type,
+        //   lastModified: file.lastModified,
+        // })),
         url: url.trim() || null,
         githubUrl: githubUrl.trim() || null,
         notes: notes.trim() || null,
@@ -63,8 +63,6 @@ const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
       setIsSubmitting(false);
     }
   };
-
-  const { submissionRequirements } = lesson;
 
   return (
     <Card className={styles.submissionForm}>
@@ -143,7 +141,7 @@ const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             icon={<Link size={20} />}
-            required={submissionRequirements.requiresUrl}
+            required
             helpText="Provide a live URL where your project can be viewed"
           />
         </div>
@@ -158,7 +156,7 @@ const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
             value={githubUrl}
             onChange={(e) => setGithubUrl(e.target.value)}
             icon={<Github size={20} />}
-            required={submissionRequirements.requiresGitHub}
+            required
             helpText="Link to your GitHub repository"
           />
         </div>
@@ -180,26 +178,8 @@ const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
         <div className={styles.requirements}>
           <h4>Submission Requirements:</h4>
           <ul>
-            {/* {submissionRequirements.description && ( */}
-            <li>{submissionRequirements.description}</li>
-            {/* )} */}
-            {/* {submissionRequirements.allowedTypes && ( */}
-            <li>
-              File types: {submissionRequirements.allowedTypes.join(", ")}
-            </li>
-            {/* )} */}
-            {/* {submissionRequirements.maxSize && ( */}
-            <li>Max file size: {submissionRequirements.maxSize}</li>
-            {/* )} */}
-            {/* {submissionRequirements.maxFiles && ( */}
-            <li>Max files: {submissionRequirements.maxFiles}</li>
-            {/* )} */}
-            {/* {submissionRequirements.requiresUrl &&  */}
             <li>Live URL required</li>
-            {/* } */}
-            {/* {submissionRequirements.requiresGitHub && ( */}
             <li>GitHub repository required</li>
-            {/* )} */}
           </ul>
         </div>
 

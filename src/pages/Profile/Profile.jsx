@@ -77,7 +77,7 @@ const Profile = () => {
                   <div className={styles.metaItem}>
                     <Calendar size={16} />
                     <span>
-                      Joined {new Date(user.joinDate).toLocaleDateString()}
+                      Joined {new Date(user.joinedDate).toDateString()}
                     </span>
                   </div>
                 </div>

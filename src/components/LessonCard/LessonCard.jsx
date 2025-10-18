@@ -10,10 +10,11 @@ import {
 import Card from "../Card/Card";
 import Button from "../Button/Button";
 import styles from "./LessonCard.module.css";
+import { MarkdownLoader } from "../MarkdownLoader/MarkdownLoader";
 
 const LessonCard = ({
   lesson,
-  courseId,
+  // courseId,
   submissions = [],
   reviewRequests = [],
   onMarkComplete,
@@ -45,10 +46,7 @@ const LessonCard = ({
 
       <div className={styles.lessonContent}>
         {lesson.content ? (
-          <div
-            dangerouslySetInnerHTML={{ __html: lesson.content }}
-            className={styles.lessonHtml}
-          />
+          <MarkdownLoader path={lesson.content} />
         ) : (
           <div>
             <h4>📚 Learning Materials</h4>
@@ -76,7 +74,10 @@ const LessonCard = ({
         {/* Show completion banner if completed */}
         {lesson.isCompleted && (
           <div className={styles.completedContent}>
-            <h4>✅ Lesson Completed</h4>
+            <div className={styles.completedHeader}>
+              <CheckCircle size={20} className={styles.completedIcon} />
+              <span>Lesson Completed</span>
+            </div>
             <p>
               Great job! You've completed this lesson. You can review the
               content above or move on to the next lesson.

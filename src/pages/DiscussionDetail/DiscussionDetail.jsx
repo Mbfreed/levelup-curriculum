@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { 
-  ArrowLeft, 
-  MessageCircle, 
-  ThumbsUp, 
+import {
+  ArrowLeft,
+  MessageCircle,
+  ThumbsUp,
   Reply,
   User,
   Clock,
-  Tag as TagIcon
+  Tag as TagIcon,
+  Eye,
 } from "lucide-react";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
@@ -47,55 +48,60 @@ Any guidance would be greatly appreciated!`,
     views: 23,
     lastActivity: "2 hours ago",
     isResolved: false,
-    createdAt: "2 days ago"
+    createdAt: "2 days ago",
   };
 
   const replies = [
     {
       id: "1",
       author: "Bob Smith",
-      content: "Great question! The functional update is particularly useful when you need to update state based on the previous state value. Here's when to use each approach...",
+      content:
+        "Great question! The functional update is particularly useful when you need to update state based on the previous state value. Here's when to use each approach...",
       timestamp: "1 day ago",
       likes: 3,
-      isAccepted: false
+      isAccepted: false,
     },
     {
-      id: "2", 
+      id: "2",
       author: "Carol Davis",
-      content: "I agree with Bob. The functional update pattern is essential when you have multiple state updates happening in quick succession, or when the new state depends on the current state.",
+      content:
+        "I agree with Bob. The functional update pattern is essential when you have multiple state updates happening in quick succession, or when the new state depends on the current state.",
       timestamp: "1 day ago",
       likes: 2,
-      isAccepted: false
+      isAccepted: false,
     },
     {
       id: "3",
-      author: "David Wilson", 
-      content: "Here's a practical example that might help clarify the difference...",
+      author: "David Wilson",
+      content:
+        "Here's a practical example that might help clarify the difference...",
       timestamp: "12 hours ago",
       likes: 5,
-      isAccepted: true
+      isAccepted: true,
     },
     {
       id: "4",
       author: "Emma Brown",
-      content: "For complex state objects, I recommend using the spread operator or a state management library like Redux for larger applications.",
+      content:
+        "For complex state objects, I recommend using the spread operator or a state management library like Redux for larger applications.",
       timestamp: "8 hours ago",
       likes: 1,
-      isAccepted: false
+      isAccepted: false,
     },
     {
       id: "5",
       author: "Frank Miller",
-      content: "The React docs have a great section on this. The key is to use functional updates when the new state depends on the previous state.",
-      timestamp: "2 hours ago", 
+      content:
+        "The React docs have a great section on this. The key is to use functional updates when the new state depends on the previous state.",
+      timestamp: "2 hours ago",
       likes: 2,
-      isAccepted: false
-    }
+      isAccepted: false,
+    },
   ];
 
   const handleSubmitReply = () => {
     if (!replyText.trim()) return;
-    
+
     // In real app, this would submit to backend
     console.log("Submitting reply:", replyText);
     setReplyText("");
@@ -137,11 +143,11 @@ Any guidance would be greatly appreciated!`,
                   <span>{discussion.createdAt}</span>
                 </div>
               </div>
-              
+
               <h1 className={styles.discussionTitle}>{discussion.title}</h1>
-              
-              <TagList 
-                tags={discussion.tags} 
+
+              <TagList
+                tags={discussion.tags}
                 size="medium"
                 className={styles.discussionTags}
               />
@@ -149,11 +155,11 @@ Any guidance would be greatly appreciated!`,
 
             <div className={styles.discussionContent}>
               <div className={styles.contentText}>
-                {discussion.content.split('\n').map((paragraph, index) => {
-                  if (paragraph.startsWith('```')) {
+                {discussion.content.split("\n").map((paragraph, index) => {
+                  if (paragraph.startsWith("```")) {
                     return (
                       <pre key={index} className={styles.codeBlock}>
-                        <code>{paragraph.replace(/```/g, '')}</code>
+                        <code>{paragraph.replace(/```/g, "")}</code>
                       </pre>
                     );
                   }
@@ -212,21 +218,25 @@ Any guidance would be greatly appreciated!`,
           {/* Replies */}
           <div className={styles.repliesSection}>
             <h3 className={styles.repliesTitle}>
-              {replies.length} {replies.length === 1 ? 'Reply' : 'Replies'}
+              {replies.length} {replies.length === 1 ? "Reply" : "Replies"}
             </h3>
-            
+
             <div className={styles.repliesList}>
               {replies.map((reply) => (
-                <Card 
-                  key={reply.id} 
-                  className={`${styles.replyCard} ${reply.isAccepted ? styles.acceptedReply : ''}`}
+                <Card
+                  key={reply.id}
+                  className={`${styles.replyCard} ${
+                    reply.isAccepted ? styles.acceptedReply : ""
+                  }`}
                 >
                   <div className={styles.replyHeader}>
                     <div className={styles.replyAuthor}>
                       <User size={16} />
                       <span>{reply.author}</span>
                       {reply.isAccepted && (
-                        <span className={styles.acceptedBadge}>Accepted Answer</span>
+                        <span className={styles.acceptedBadge}>
+                          Accepted Answer
+                        </span>
                       )}
                     </div>
                     <div className={styles.replyTimestamp}>
@@ -234,11 +244,11 @@ Any guidance would be greatly appreciated!`,
                       <span>{reply.timestamp}</span>
                     </div>
                   </div>
-                  
+
                   <div className={styles.replyContent}>
                     <p>{reply.content}</p>
                   </div>
-                  
+
                   <div className={styles.replyActions}>
                     <Button
                       variant="ghost"
@@ -246,7 +256,7 @@ Any guidance would be greatly appreciated!`,
                       onClick={() => handleLikeReply(reply.id)}
                       icon={<ThumbsUp size={14} />}
                     >
-                      {reply.likes} {reply.likes === 1 ? 'like' : 'likes'}
+                      {reply.likes} {reply.likes === 1 ? "like" : "likes"}
                     </Button>
                   </div>
                 </Card>
@@ -265,7 +275,8 @@ Any guidance would be greatly appreciated!`,
                 <span>{discussion.replies} replies</span>
               </div>
               <div className={styles.statItem}>
-                <span>👁️ {discussion.views} views</span>
+                <Eye size={16} />
+                <span>{discussion.views} views</span>
               </div>
               <div className={styles.statItem}>
                 <Clock size={16} />

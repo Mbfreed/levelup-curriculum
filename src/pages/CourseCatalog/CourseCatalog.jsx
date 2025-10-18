@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCourse } from "../../contexts/CourseContext";
+// import { useCourse } from "../../contexts/CourseContext";
 import {
   Search,
   Filter,
@@ -17,6 +17,8 @@ import Input from "../../components/Input/Input";
 import SearchAndFilter from "../../components/SearchAndFilter/SearchAndFilter";
 import TagList from "../../components/TagList/TagList";
 import styles from "./CourseCatalog.module.css";
+// import courses from "../../courses.json";
+import { useCourse } from "../../contexts/CourseContext";
 
 const CourseCatalog = () => {
   const { courses, enrollInCourse, getAllLessons } = useCourse();
@@ -25,6 +27,13 @@ const CourseCatalog = () => {
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
   const [showFilters, setShowFilters] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth > 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const levels = ["all", "Beginner", "Intermediate", "Advanced"];
   const sortOptions = [
@@ -91,10 +100,11 @@ const CourseCatalog = () => {
         searchTerm={searchTerm}
         onSearchChange={(e) => setSearchTerm(e.target.value)}
         showFilters={showFilters}
-        onToggleFilters={toggleFilters}
+        onToggleFilters={isDesktop ? null : toggleFilters}
         placeholder="Search courses, topics, or skills..."
+        inlineFilters={isDesktop}
       >
-        {showFilters && (
+        {(isDesktop || showFilters) && (
           <div className={styles.filterSection}>
             <div className={styles.filterGroup}>
               <label className={styles.filterLabel}>Level</label>
@@ -133,8 +143,8 @@ const CourseCatalog = () => {
       <div className={styles.results}>
         <div className={styles.resultsHeader}>
           <h2 className={styles.resultsTitle}>
-            {filteredCourses.length} Course
-            {filteredCourses.length !== 1 ? "s" : ""} Found
+            {courses.length} Course
+            {courses.length !== 1 ? "s" : ""} Found
           </h2>
         </div>
 

@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Star,
-  ExternalLink,
-  Github,
-  FileText,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { Star, ExternalLink, Github, FileText, ChevronDown, ChevronUp} from "lucide-react";
 import Modal from "../Modal/Modal";
 import Button from "../Button/Button";
 import styles from "./ReviewRequestsModal.module.css";
@@ -68,12 +61,8 @@ const ReviewRequestsModal = ({
                   onClick={(e) => toggleExpanded(request.id, e)}
                   title={expandedRequest === request.id ? "Collapse" : "Expand"}
                 >
-                  {expandedRequest === request.id ? (
-                    <ChevronUp size={16} />
-                  ) : (
-                    <ChevronDown size={16} />
-                  )}
-                </button>
+                  {expandedRequest === request.id ? <ChevronUp size={16}/> : <ChevronDown size={16}/> }
+                </Button>
               </div>
             </div>
 

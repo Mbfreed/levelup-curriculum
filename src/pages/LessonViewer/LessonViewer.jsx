@@ -25,6 +25,7 @@ import ReviewRequestsModal from "../../components/ReviewRequestsModal/ReviewRequ
 import SubmissionsModal from "../../components/SubmissionsModal/SubmissionsModal";
 import Modal from "../../components/Modal/Modal";
 import styles from "./LessonViewer.module.css";
+// import courses from "../../courses.json";
 
 const LessonViewer = () => {
   const { courseId, lessonId } = useParams();
@@ -48,6 +49,11 @@ const LessonViewer = () => {
   const [showReviewRequests, setShowReviewRequests] = useState(false);
   const [showSubmissions, setShowSubmissions] = useState(false);
   const [expandedModules, setExpandedModules] = useState({});
+  // const coursesData = courses.courses;
+  // const course = coursesData.find((c) => c.id === courseId);
+  // const lesson = course
+  //   ? course.modules.flatMap((m) => m.lessons).find((l) => l.id === lessonId)
+  //   : null;
 
   const handleMarkComplete = () => {
     if (!lesson.isCompleted) {
@@ -129,14 +135,9 @@ const LessonViewer = () => {
       <div className={styles.header}>
         <div className={styles.breadcrumb}>
           <Link to="/courses" className={styles.breadcrumbLink}>
-            Courses
+            <span className={styles.breadcrumbSeparator}>←</span>
+            Back
           </Link>
-          <span className={styles.breadcrumbSeparator}>→</span>
-          <Link to={`/courses/${courseId}`} className={styles.breadcrumbLink}>
-            {course.title}
-          </Link>
-          <span className={styles.breadcrumbSeparator}>→</span>
-          <span className={styles.breadcrumbCurrent}>{lesson.title}</span>
         </div>
         <h1 className={styles.title}>{lesson.title}</h1>
         <p className={styles.description}>{lesson.description}</p>
