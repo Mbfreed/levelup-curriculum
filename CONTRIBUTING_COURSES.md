@@ -70,32 +70,32 @@ Create a `course.json` file at the root of your course folder:
 
 ### Required Fields:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Unique course identifier (kebab-case, no spaces) |
-| `title` | string | Course title |
-| `description` | string | What students will learn |
-| `level` | string | "Beginner", "Intermediate", or "Advanced" |
-| `tags` | array | Search/filter tags (e.g., ["React", "Frontend", "JavaScript"]) |
-| `modules` | array | Array of modules |
+| Field         | Type   | Description                                                    |
+| ------------- | ------ | -------------------------------------------------------------- |
+| `id`          | string | Unique course identifier (kebab-case, no spaces)               |
+| `title`       | string | Course title                                                   |
+| `description` | string | What students will learn                                       |
+| `level`       | string | "Beginner", "Intermediate", or "Advanced"                      |
+| `tags`        | array  | Search/filter tags (e.g., ["React", "Frontend", "JavaScript"]) |
+| `modules`     | array  | Array of modules                                               |
 
 ### Module Fields:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Unique module identifier (kebab-case) |
-| `title` | string | Module title |
-| `lessons` | array | Array of lessons in this module |
+| Field     | Type   | Description                           |
+| --------- | ------ | ------------------------------------- |
+| `id`      | string | Unique module identifier (kebab-case) |
+| `title`   | string | Module title                          |
+| `lessons` | array  | Array of lessons in this module       |
 
 ### Lesson Fields:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Unique lesson identifier (kebab-case) |
-| `title` | string | Lesson title |
-| `type` | string | "lesson" or "assignment" |
+| Field      | Type   | Description                                       |
+| ---------- | ------ | ------------------------------------------------- |
+| `id`       | string | Unique lesson identifier (kebab-case)             |
+| `title`    | string | Lesson title                                      |
+| `type`     | string | "lesson" or "assignment"                          |
 | `filePath` | string | Path to markdown file (relative to course folder) |
-| `points` | number | Points earned: 10 for lessons, 15 for assignments |
+| `points`   | number | Points earned: 10 for lessons, 15 for assignments |
 
 ---
 
@@ -103,7 +103,7 @@ Create a `course.json` file at the root of your course folder:
 
 Create markdown files in the appropriate module folder:
 
-```markdown
+````markdown
 # Introduction to HTML
 
 ## What is HTML?
@@ -129,6 +129,7 @@ HTML (HyperText Markup Language) is the standard markup language for creating we
   </body>
 </html>
 ```
+````
 
 ## Learning Resources
 
@@ -138,6 +139,7 @@ HTML (HyperText Markup Language) is the standard markup language for creating we
 ## Next Steps
 
 Complete the assignment to practice what you've learned.
+
 ```
 
 ---
@@ -252,3 +254,4 @@ For questions:
 - Open an issue on GitHub
 
 Happy teaching! 🚀
+```

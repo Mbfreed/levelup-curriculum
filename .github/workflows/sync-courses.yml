@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'src/courses/**'
+      - "src/courses/**"
 
 jobs:
   sync:
@@ -21,11 +21,11 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{}' \
             --fail
-        
+
       - name: Log sync completion
         if: success()
         run: echo "✅ Courses successfully synced to Supabase"
-        
+
       - name: Log sync failure
         if: failure()
         run: echo "❌ Failed to sync courses. Please check the Edge Function logs."

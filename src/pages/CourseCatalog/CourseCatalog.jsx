@@ -155,8 +155,8 @@ const CourseCatalog = () => {
           <>
             <div className={styles.resultsHeader}>
               <h2 className={styles.resultsTitle}>
-                {courses.length} Course
-                {courses.length !== 1 ? "s" : ""} Found
+                {filteredCourses.length} Course
+                {filteredCourses.length !== 1 ? "s" : ""} Found
               </h2>
             </div>
 

@@ -62,16 +62,19 @@ The workflow file (`.github/workflows/sync-courses.yml`) should already exist. I
 ### Troubleshooting
 
 **❌ Workflow shows red (failed):**
+
 - Check that `SUPABASE_ANON_KEY` secret is set correctly
 - Go to **Actions → Sync Courses → logs** to see error details
 - Common issue: Wrong key or URL
 
 **❌ Workflow doesn't trigger:**
+
 - Make sure you changed files in `src/courses/`
 - Workflow only triggers on `main` branch
 - Check that the YAML file is in `.github/workflows/sync-courses.yml`
 
 **❌ Courses didn't sync:**
+
 - Check Supabase Edge Function logs for errors
 - Verify `course.json` is valid JSON
 - Make sure all file paths in `course.json` are correct
