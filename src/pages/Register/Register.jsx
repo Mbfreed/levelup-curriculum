@@ -9,7 +9,8 @@ import styles from "./Register.module.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -39,10 +40,19 @@ const Register = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Full name is required";
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = "Name must be at least 2 characters";
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full name is required";
+    } else if (formData.fullName.trim().length < 2) {
+      newErrors.fullName = "Name must be at least 2 characters";
+    }
+
+    if (!formData.username.trim()) {
+      newErrors.username = "Username is required";
+    } else if (formData.username.trim().length < 3) {
+      newErrors.username = "Username must be at least 3 characters";
+    } else if (!/^[a-zA-Z0-9_-]+$/.test(formData.username)) {
+      newErrors.username =
+        "Username can only contain letters, numbers, underscores, and hyphens";
     }
 
     if (!formData.email.trim()) {
@@ -75,7 +85,8 @@ const Register = () => {
     setIsSubmitting(true);
     try {
       const result = await register(
-        formData.name,
+        formData.fullName,
+        formData.username,
         formData.email,
         formData.password
       );
@@ -143,12 +154,26 @@ const Register = () => {
                 <Input
                   label="Full Name"
                   type="text"
-                  name="name"
-                  value={formData.name}
+                  name="fullName"
+                  value={formData.fullName}
                   onChange={handleChange}
                   placeholder="Enter your full name"
                   icon={<User size={20} />}
-                  error={errors.name}
+                  error={errors.fullName}
+                  required
+                />
+              </div>
+
+              <div className={styles.inputGroup}>
+                <Input
+                  label="Username"
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  placeholder="Choose a username"
+                  icon={<User size={20} />}
+                  error={errors.username}
                   required
                 />
               </div>
