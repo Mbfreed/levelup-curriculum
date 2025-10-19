@@ -12,11 +12,10 @@ import Button from "../../components/Button/Button";
 import MarkdownRenderer from "../../components/MarkdownRenderer/MarkdownRenderer";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import styles from "./LessonViewer.module.css";
-import { useCourse } from "../../contexts/CourseContextSupabase";
-import { useUser } from "../../contexts/UserContext";
+import { useCourse } from "../../hooks/useCourse";
+import { useUser } from "../../hooks/useUser";
 import {
   recordLessonCompletion,
-  getCourseProgress,
 } from "../../utils/courseUtils";
 
 const LessonViewerNew = () => {

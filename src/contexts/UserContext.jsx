@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "../config/supabaseConfig";
-
-const UserContext = createContext();
+import { UserContext } from "./UserContextFile";
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -263,10 +262,4 @@ export const UserProvider = ({ children }) => {
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUser must be used within a UserProvider");
-  }
-  return context;
-};
+

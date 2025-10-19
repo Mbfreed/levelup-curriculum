@@ -11,8 +11,8 @@ import {
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import styles from "./Dashboard.module.css";
-import { useUser } from "../../contexts/UserContext";
-import { useCourse } from "../../contexts/CourseContextSupabase";
+import { useUser } from "../../hooks/useUser";
+import { useCourse } from "../../hooks/useCourse";
 import StatCard from "../../components/StatCard/StatCard";
 
 const DashboardNew = () => {
@@ -54,7 +54,6 @@ const DashboardNew = () => {
   // Calculate stats
   const totalPoints = user.total_points || 0;
   const currentLevel = user.current_level || 1;
-  const pointsToNextLevel = currentLevel * 500;
   const progressToNextLevel = ((totalPoints % 500) / 500) * 100;
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Mail,
   MapPin,
@@ -14,7 +14,7 @@ import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 import styles from "./Profile.module.css";
-import { useUser } from "../../contexts/UserContext";
+import { useUser } from "../../hooks/useUser";
 import { supabase } from "../../config/supabaseConfig";
 
 const TOKEN_SCALING = {
@@ -41,18 +41,7 @@ const ProfileNew = () => {
   const [completedCourses, setCompletedCourses] = useState([]);
   const [isLoadingCourses, setIsLoadingCourses] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        full_name: user.full_name || "",
-        username: user.username || "",
-        wallet_address: user.wallet_address || "",
-      });
-      loadCompletedCourses();
-    }
-  }, [user?.id]);
-
-  const loadCompletedCourses = async () => {
+  const loadCompletedCourses = useCallback(async () => {
     if (!user?.id) return;
     setIsLoadingCourses(true);
     try {
@@ -66,12 +55,23 @@ const ProfileNew = () => {
       } else {
         setCompletedCourses(data || []);
       }
-    } catch (error) {
-      console.error("Error loading completed courses:", error);
+    } catch (err) {
+      console.error("Error loading completed courses:", err);
     } finally {
       setIsLoadingCourses(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        full_name: user.full_name || "",
+        username: user.username || "",
+        wallet_address: user.wallet_address || "",
+      });
+      loadCompletedCourses();
+    }
+  }, [user, loadCompletedCourses]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -103,7 +103,7 @@ const ProfileNew = () => {
           text: result.error || "Failed to update profile",
         });
       }
-    } catch (error) {
+    } catch {
       setMessage({
         type: "error",
         text: "Error updating profile",

@@ -14,12 +14,12 @@ import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 import styles from "./CourseCatalog.module.css";
-import { useCourse } from "../../contexts/CourseContextSupabase";
-import { useUser } from "../../contexts/UserContext";
+import { useCourse } from "../../hooks/useCourse";
+import { useUser } from "../../hooks/useUser";
 import { enrollCourse } from "../../utils/courseUtils";
 
 const CourseCatalogNew = () => {
-  const { courses, isLoading, isEnrolled, userEnrollments } = useCourse();
+  const { courses, isLoading, isEnrolled } = useCourse();
   const { user } = useUser();
   const navigate = useNavigate();
   

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   fetchAllCourses,
   fetchCourseById,
@@ -6,11 +6,10 @@ import {
   fetchUserEnrollments,
   getCourseProgress,
 } from "../utils/courseUtils";
-import { useUser } from "./UserContext";
+import { useUser } from "../hooks/useUser";
+import { CourseContext } from "./CourseContextFile";
 
-const CourseContextNew = createContext();
-
-export const CourseProvider = ({ children }) => {
+const CourseProvider = ({ children }) => {
   const { user } = useUser();
   const [courses, setCourses] = useState([]);
   const [currentCourse, setCurrentCourse] = useState(null);
@@ -140,10 +139,4 @@ export const CourseProvider = ({ children }) => {
   );
 };
 
-export const useCourse = () => {
-  const context = useContext(CourseContextNew);
-  if (!context) {
-    throw new Error("useCourse must be used within a CourseProvider");
-  }
-  return context;
-};
+export { CourseProvider };
