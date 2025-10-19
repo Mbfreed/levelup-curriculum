@@ -4,6 +4,7 @@
   "description": "Learn the fundamentals of web development including HTML, CSS, and JavaScript",
   "level": "Beginner",
   "tags": ["HTML", "CSS", "JavaScript", "Web Development"],
+  "thumbnail": "https://www.simplilearn.com/ice9/free_resources_article_thumb/is_web_development_good_career.jpg",
   "modules": [
     {
       "id": "module-1-html-css",

@@ -170,7 +170,21 @@ const CourseCatalog = () => {
                   onClick={() => handleViewCourse(course.id)}
                 >
                   <div className={styles.courseImage}>
-                    <div className={styles.imagePlaceholder}>
+                    {course.thumbnail ? (
+                      <img
+                        src={course.thumbnail}
+                        alt={course.title}
+                        className={styles.courseImageImg}
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                          e.target.nextElementSibling.style.display = "flex";
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className={styles.imagePlaceholder}
+                      style={{ display: course.thumbnail ? "none" : "flex" }}
+                    >
                       <BookOpen size={48} />
                     </div>
                     <div className={styles.courseBadge}>
@@ -183,10 +197,6 @@ const CourseCatalog = () => {
                   <div className={styles.courseContent}>
                     <div className={styles.courseHeader}>
                       <h3 className={styles.courseTitle}>{course.title}</h3>
-                      <div className={styles.courseRating}>
-                        <Star size={16} className={styles.starIcon} />
-                        <span>{course.rating || "N/A"}</span>
-                      </div>
                     </div>
 
                     <p className={styles.courseDescription}>
