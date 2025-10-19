@@ -6,9 +6,9 @@ import HomeRoute from "./components/HomeRoute/HomeRoute";
 import Landing from "./pages/Landing/Landing";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import DashboardNew from "./pages/Dashboard/DashboardNew";
-import CourseCatalogNew from "./pages/CourseCatalog/CourseCatalogNew";
-import LessonViewerNew from "./pages/LessonViewer/LessonViewerNew";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import CourseCatalog from "./pages/CourseCatalog/CourseCatalog";
+import LessonViewer from "./pages/LessonViewer/LessonViewer";
 import ProfileNew from "./pages/Profile/ProfileNew";
 import PeerReview from "./pages/PeerReview/PeerReview";
 import Rewards from "./pages/Rewards/Rewards";
@@ -54,7 +54,7 @@ export const router = createBrowserRouter([
         path: "dashboard",
         Component: () => (
           <ProtectedRoute>
-            <DashboardNew />
+            <Dashboard />
           </ProtectedRoute>
         ),
       },
@@ -62,7 +62,7 @@ export const router = createBrowserRouter([
         path: "courses",
         Component: () => (
           <ProtectedRoute>
-            <CourseCatalogNew />
+            <CourseCatalog />
           </ProtectedRoute>
         ),
       },
@@ -70,7 +70,7 @@ export const router = createBrowserRouter([
         path: "courses/:courseId/lessons/:lessonId",
         Component: () => (
           <ProtectedRoute>
-            <LessonViewerNew />
+            <LessonViewer />
           </ProtectedRoute>
         ),
       },
