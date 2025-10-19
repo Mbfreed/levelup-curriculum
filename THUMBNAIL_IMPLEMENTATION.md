@@ -3,56 +3,61 @@
 ## What Was Added:
 
 ### 1. **course.json Updates** ✅
+
 - Added `thumbnail` field to all 3 courses
 - Using Unsplash URLs as placeholders (change as needed)
 - Format: `"thumbnail": "https://url-to-image"`
 
 ### 2. **Supabase Schema Update** (Run This)
+
 Go to Supabase SQL Editor and run:
+
 ```sql
 ALTER TABLE courses
 ADD COLUMN IF NOT EXISTS thumbnail TEXT;
 ```
 
 ### 3. **Update Edge Function** (sync-courses)
+
 In your Supabase Edge Function, update the upsert to include:
+
 ```typescript
-const { error } = await supabase
-  .from("courses")
-  .upsert(
-    {
-      id: courseJSON.id,
-      title: courseJSON.title,
-      description: courseJSON.description,
-      level: courseJSON.level,
-      tags: courseJSON.tags || [],
-      thumbnail: courseJSON.thumbnail,  // ADD THIS LINE
-      modules: courseJSON.modules,
-      git_path: `${COURSES_DIR}/${folder}`,
-      last_synced_at: new Date().toISOString(),
-    },
-    { onConflict: "id" }
-  );
+const { error } = await supabase.from("courses").upsert(
+  {
+    id: courseJSON.id,
+    title: courseJSON.title,
+    description: courseJSON.description,
+    level: courseJSON.level,
+    tags: courseJSON.tags || [],
+    thumbnail: courseJSON.thumbnail, // ADD THIS LINE
+    modules: courseJSON.modules,
+    git_path: `${COURSES_DIR}/${folder}`,
+    last_synced_at: new Date().toISOString(),
+  },
+  { onConflict: "id" }
+);
 ```
 
 ### 4. **Update Frontend** (CourseCatalog.jsx)
+
 Replace the imagePlaceholder with actual thumbnail:
+
 ```jsx
 <div className={styles.courseImage}>
   {course.thumbnail ? (
-    <img 
-      src={course.thumbnail} 
+    <img
+      src={course.thumbnail}
       alt={course.title}
       className={styles.courseImageImg}
       onError={(e) => {
-        e.target.style.display = 'none';
-        e.target.nextElementSibling.style.display = 'flex';
+        e.target.style.display = "none";
+        e.target.nextElementSibling.style.display = "flex";
       }}
     />
   ) : null}
-  <div 
+  <div
     className={styles.imagePlaceholder}
-    style={{display: course.thumbnail ? 'none' : 'flex'}}
+    style={{ display: course.thumbnail ? "none" : "flex" }}
   >
     <BookOpen size={48} />
   </div>
@@ -61,6 +66,7 @@ Replace the imagePlaceholder with actual thumbnail:
 ```
 
 ### 5. **Add CSS** (CourseCatalog.module.css)
+
 ```css
 .courseImageImg {
   width: 100%;
@@ -97,15 +103,18 @@ Replace the imagePlaceholder with actual thumbnail:
 ## 🖼️ Thumbnail Sources:
 
 **Option 1: Unsplash (Free, High Quality)**
+
 - Web Dev: `https://images.unsplash.com/photo-1633356122544-f134324ef6db`
 - React: `https://images.unsplash.com/photo-1633356122544-f134324ef6db`
 - JavaScript: `https://images.unsplash.com/photo-1633356122544-f134324ef6db`
 
 **Option 2: Supabase Storage**
+
 - Upload images to Supabase bucket
 - Reference with Supabase public URL
 
 **Option 3: Community Submissions**
+
 - Allow contributors to provide thumbnail URLs in their course.json
 
 ---
