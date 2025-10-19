@@ -1,152 +1,168 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-import { auth, db } from "../config/firebaseConfig";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-
-const UserContext = createContext();
+  signUp,
+  signIn,
+  signOut as supabaseSignOut,
+  getUserProfile,
+  onAuthStateChange,
+} from "../services/authService";
+import { UserContext } from "./createUserContext";
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isInitializing, setIsInitializing] = useState(true);
 
+  // Listen to auth state changes on mount
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        const userData = await fetchUserDetails(currentUser.uid);
-        setUser(userData);
+    // Set up auth state listener
+    const unsubscribe = onAuthStateChange(async (authUser) => {
+      if (authUser) {
+        setUser(authUser);
         setIsAuthenticated(true);
+
+        // Fetch user profile from users table
+        const {
+          success,
+          profile: userProfile,
+          error: profileError,
+        } = await getUserProfile(authUser.id);
+
+        if (success) {
+          setProfile(userProfile);
+        } else {
+          console.error("Error fetching user profile:", profileError);
+          const defaultProfile = {
+            id: authUser.id,
+            email: authUser.email,
+            full_name: authUser.user_metadata?.full_name || authUser.email,
+            username:
+              authUser.user_metadata?.username || authUser.email.split("@")[0],
+            current_level: 1,
+            total_points: 0,
+            created_at: new Date().toISOString(),
+          };
+          setProfile(defaultProfile);
+        }
       } else {
         setUser(null);
+        setProfile(null);
         setIsAuthenticated(false);
       }
+      setIsInitializing(false);
     });
 
-    return () => unsubscribe();
+    // Cleanup function
+    return () => {
+      // Only call unsubscribe if it's a function
+      if (typeof unsubscribe === "function") {
+        unsubscribe();
+      }
+    };
   }, []);
 
   const updateUser = (userData) => {
-    setUser((prev) => ({ ...prev, ...userData }));
+    setProfile((prev) => ({ ...prev, ...userData }));
   };
 
-  const uploadUserDetails = async (userData) => {
+  const refreshProfile = async () => {
+    if (!user) return;
     try {
-      await setDoc(doc(db, "users", userData.uid), userData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+      const {
+        success,
+        profile: userProfile,
+        error: profileError,
+      } = await getUserProfile(user.id);
 
-  const fetchUserDetails = async (userId) => {
-    try {
-      const docSnap = await getDoc(doc(db, "users", userId));
-
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        return docSnap.data();
+      if (success) {
+        setProfile(userProfile);
       } else {
-        console.log("No such document!");
-        return;
+        console.error("Error refreshing user profile:", profileError);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error in refreshProfile:", error);
     }
   };
 
   const login = async (email, password) => {
     setIsLoading(true);
+    setError(null);
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
-      const userData = await fetchUserDetails(user.uid);
-      console.log(userData);
+      const { success, error: signInError } = await signIn(email, password);
 
-      setUser(userData);
-      setIsAuthenticated(true);
+      if (!success) {
+        setError(signInError);
+        return { success: false, error: signInError };
+      }
+
       return { success: true };
-    } catch (error) {
-      return { success: false, error: error.code };
+    } catch (err) {
+      console.error("Login error:", err);
+      const errorMessage = err.message || "Login failed. Please try again.";
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
     } finally {
       setIsLoading(false);
     }
   };
 
-  const register = async (name, email, password) => {
+  const register = async (fullName, email, password) => {
     setIsLoading(true);
+    setError(null);
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
+      // Create username from email (remove domain)
+      const username = email.split("@")[0];
+
+      const { success, error: signUpError } = await signUp(
         email,
-        password
+        password,
+        fullName,
+        username
       );
-      const user = userCredential.user;
 
-      const userData = {
-        uid: user.uid,
-        name: name,
-        email: email,
-        avatar: null,
-        level: "Beginner",
-        exp: 0,
-        coins: 0,
-        streak: 0,
-        joinedDate: user.metadata.creationTime,
-        totalLessonsCompleted: 0,
-        totalCoursesCompleted: 0,
-      };
-
-      console.log("User is Registered successfully");
-
-      await uploadUserDetails(userData);
-
-      console.log("User details uploaded to Firestore");
+      if (!success) {
+        setError(signUpError);
+        return { success: false, error: signUpError };
+      }
 
       return { success: true };
-    } catch (error) {
-      return { success: false, error: error.code };
+    } catch (err) {
+      console.error("Register error:", err);
+      const errorMessage =
+        err.message || "Registration failed. Please try again.";
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
     } finally {
       setIsLoading(false);
     }
   };
 
   const logout = async () => {
-    setIsLoading(false);
+    setIsLoading(true);
+    setError(null);
     try {
-      await signOut(auth);
+      const { success, error: signOutError } = await supabaseSignOut();
+
+      if (!success) {
+        setError(signOutError);
+        return { success: false, error: signOutError };
+      }
+
       setUser(null);
+      setProfile(null);
       setIsAuthenticated(false);
-    } catch (error) {
-      console.log(error);
+      return { success: true };
+    } catch (err) {
+      console.error("Logout error:", err);
+      const errorMessage = err.message || "Logout failed. Please try again.";
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const addExp = (amount) => {
-    setUser((prev) => (prev ? { ...prev, exp: prev.exp + amount } : null));
-  };
-
-  const addCoins = (amount) => {
-    setUser((prev) => (prev ? { ...prev, coins: prev.coins + amount } : null));
-  };
-
-  const levelUp = (newLevel, newExp) => {
-    setUser((prev) =>
-      prev ? { ...prev, level: newLevel, exp: newExp } : null
-    );
-  };
-
-  const updateStreak = (streak) => {
-    setUser((prev) => (prev ? { ...prev, streak } : null));
   };
 
   const setLoading = (loading) => {
@@ -155,26 +171,18 @@ export const UserProvider = ({ children }) => {
 
   const value = {
     user,
+    profile,
     isAuthenticated,
     isLoading,
+    isInitializing,
+    error,
     login,
     register,
     logout,
     updateUser,
-    addExp,
-    addCoins,
-    levelUp,
-    updateStreak,
+    refreshProfile,
     setLoading,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
-};
-
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUser must be used within a UserProvider");
-  }
-  return context;
 };

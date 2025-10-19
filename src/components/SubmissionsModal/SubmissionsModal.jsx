@@ -42,9 +42,14 @@ const SubmissionsModal = ({ isOpen, onClose, submissions }) => {
           <div key={submission.id} className={styles.submissionCard}>
             <div className={styles.submissionHeader}>
               <div className={styles.submissionInfo}>
-                <h4 className={styles.submissionTitle}>
-                  Submission #{submission.id.slice(-4)}
-                </h4>
+                <div className={styles.userInfo}>
+                  <h4 className={styles.submissionTitle}>
+                    {submission.userName}
+                  </h4>
+                  <span className={styles.userId}>
+                    Submission #{submission.id.slice(-4)}
+                  </span>
+                </div>
                 <span className={styles.submissionDate}>
                   {new Date(submission.submittedAt).toLocaleDateString()}
                 </span>

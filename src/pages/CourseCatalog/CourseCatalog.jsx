@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useCourse } from "../../contexts/CourseContext";
 import {
   Search,
   Filter,
@@ -10,24 +9,26 @@ import {
   BookOpen,
   ChevronDown,
   ChevronUp,
+  Loader,
 } from "lucide-react";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 import SearchAndFilter from "../../components/SearchAndFilter/SearchAndFilter";
 import TagList from "../../components/TagList/TagList";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import styles from "./CourseCatalog.module.css";
-// import courses from "../../courses.json";
-import { useCourse } from "../../contexts/CourseContext";
+import { useCourse } from "../../hooks/useCourse";
 
 const CourseCatalog = () => {
-  const { courses, enrollInCourse, getAllLessons } = useCourse();
+  const { courses, enrollInCourse, addNotification } = useCourse();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
   const [showFilters, setShowFilters] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+  const [enrollingCourseId, setEnrollingCourseId] = useState(null);
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth > 768);
@@ -48,9 +49,10 @@ const CourseCatalog = () => {
       const matchesSearch =
         course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         course.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.tags.some((tag) =>
-          tag.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        (course.tags &&
+          course.tags.some((tag) =>
+            tag.toLowerCase().includes(searchTerm.toLowerCase())
+          ));
 
       const matchesLevel =
         selectedLevel === "all" || course.level === selectedLevel;
@@ -60,21 +62,29 @@ const CourseCatalog = () => {
     .sort((a, b) => {
       switch (sortBy) {
         case "popular":
-          return b.students - a.students;
+          return (b.enrolled_count || 0) - (a.enrolled_count || 0);
         case "rating":
-          return b.rating - a.rating;
+          return (b.rating || 0) - (a.rating || 0);
         case "newest":
-          return new Date(b.joinDate || 0) - new Date(a.joinDate || 0);
+          return new Date(b.created_at || 0) - new Date(a.created_at || 0);
         case "price":
-          return a.price - b.price;
+          return (a.price || 0) - (b.price || 0);
         default:
           return 0;
       }
     });
 
-  const handleEnroll = (courseId) => {
-    enrollInCourse(courseId);
-    navigate(`/courses/${courseId}`);
+  const handleEnroll = async (courseId) => {
+    setEnrollingCourseId(courseId);
+    try {
+      await enrollInCourse(courseId);
+      addNotification("Enrolled successfully!", "success");
+      navigate(`/courses/${courseId}`);
+    } catch {
+      addNotification("Failed to enroll. Please try again.", "error");
+    } finally {
+      setEnrollingCourseId(null);
+    }
   };
 
   const handleViewCourse = (courseId) => {
@@ -107,7 +117,6 @@ const CourseCatalog = () => {
         {(isDesktop || showFilters) && (
           <div className={styles.filterSection}>
             <div className={styles.filterGroup}>
-              <label className={styles.filterLabel}>Level</label>
               <select
                 value={selectedLevel}
                 onChange={(e) => setSelectedLevel(e.target.value)}
@@ -122,7 +131,6 @@ const CourseCatalog = () => {
             </div>
 
             <div className={styles.filterGroup}>
-              <label className={styles.filterLabel}>Sort by</label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
@@ -141,104 +149,126 @@ const CourseCatalog = () => {
 
       {/* Results */}
       <div className={styles.results}>
-        <div className={styles.resultsHeader}>
-          <h2 className={styles.resultsTitle}>
-            {courses.length} Course
-            {courses.length !== 1 ? "s" : ""} Found
-          </h2>
-        </div>
+        {!courses || courses.length === 0 ? (
+          <LoadingSpinner size="lg" message="Loading courses..." />
+        ) : (
+          <>
+            <div className={styles.resultsHeader}>
+              <h2 className={styles.resultsTitle}>
+                {courses.length} Course
+                {courses.length !== 1 ? "s" : ""} Found
+              </h2>
+            </div>
 
-        <div className={styles.courseGrid}>
-          {filteredCourses.map((course) => (
-            <Card
-              key={course.id}
-              className={styles.courseCard}
-              hover
-              clickable
-              onClick={() => handleViewCourse(course.id)}
-            >
-              <div className={styles.courseImage}>
-                <div className={styles.imagePlaceholder}>
-                  <BookOpen size={48} />
-                </div>
-                <div className={styles.courseBadge}>
-                  {course.price === 0 ? "Free" : `${course.price} Coins`}
-                </div>
-              </div>
-
-              <div className={styles.courseContent}>
-                <div className={styles.courseHeader}>
-                  <h3 className={styles.courseTitle}>{course.title}</h3>
-                  <div className={styles.courseRating}>
-                    <Star size={16} className={styles.starIcon} />
-                    <span>{course.rating}</span>
+            <div className={styles.courseGrid}>
+              {filteredCourses.map((course) => (
+                <Card
+                  key={course.id}
+                  className={styles.courseCard}
+                  hover
+                  clickable
+                  onClick={() => handleViewCourse(course.id)}
+                >
+                  <div className={styles.courseImage}>
+                    <div className={styles.imagePlaceholder}>
+                      <BookOpen size={48} />
+                    </div>
+                    <div className={styles.courseBadge}>
+                      {(course.price || 0) === 0
+                        ? "Free"
+                        : `${course.price} Coins`}
+                    </div>
                   </div>
-                </div>
 
-                <p className={styles.courseDescription}>{course.description}</p>
+                  <div className={styles.courseContent}>
+                    <div className={styles.courseHeader}>
+                      <h3 className={styles.courseTitle}>{course.title}</h3>
+                      <div className={styles.courseRating}>
+                        <Star size={16} className={styles.starIcon} />
+                        <span>{course.rating || "N/A"}</span>
+                      </div>
+                    </div>
 
-                <div className={styles.courseMeta}>
-                  <div className={styles.metaItem}>
-                    <Clock size={16} />
-                    <span>{course.duration}</span>
-                  </div>
-                  <div className={styles.metaItem}>
-                    <BookOpen size={16} />
-                    <span>{getAllLessons(course).length} lessons</span>
-                  </div>
-                  <div className={styles.metaItem}>
-                    <Users size={16} />
-                    <span>{course.students.toLocaleString()}</span>
-                  </div>
-                </div>
+                    <p className={styles.courseDescription}>
+                      {course.description}
+                    </p>
 
-                <div className={styles.courseTags}>
-                  {course.tags.slice(0, 3).map((tag) => (
-                    <span key={tag} className={styles.tag}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                    <div className={styles.courseMeta}>
+                      <div className={styles.metaItem}>
+                        <Clock size={16} />
+                        <span>{course.duration || "Self-paced"}</span>
+                      </div>
+                      <div className={styles.metaItem}>
+                        <BookOpen size={16} />
+                        <span>{course.lessons_count || 0} lessons</span>
+                      </div>
+                      <div className={styles.metaItem}>
+                        <Users size={16} />
+                        <span>{course.enrolled_count || 0} enrolled</span>
+                      </div>
+                    </div>
 
-                <div className={styles.courseFooter}>
-                  <div className={styles.courseLevel}>
-                    <span className={styles.levelBadge}>{course.level}</span>
+                    <div className={styles.courseTags}>
+                      {(course.tags || []).slice(0, 3).map((tag) => (
+                        <span key={tag} className={styles.tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className={styles.courseFooter}>
+                      <div className={styles.courseLevel}>
+                        <span className={styles.levelBadge}>
+                          {course.level}
+                        </span>
+                      </div>
+                      <Button
+                        variant={course.isEnrolled ? "outline" : "primary"}
+                        size="sm"
+                        disabled={enrollingCourseId === course.id}
+                        icon={
+                          enrollingCourseId === course.id ? (
+                            <Loader size={16} className={styles.spinning} />
+                          ) : undefined
+                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEnroll(course.id);
+                        }}
+                      >
+                        {enrollingCourseId === course.id
+                          ? "Enrolling..."
+                          : course.isEnrolled
+                          ? "Continue"
+                          : "Enroll"}
+                      </Button>
+                    </div>
                   </div>
+                </Card>
+              ))}
+            </div>
+
+            {filteredCourses.length === 0 && (
+              <div className={styles.emptyState}>
+                <div className={styles.emptyContent}>
+                  <BookOpen size={64} className={styles.emptyIcon} />
+                  <h3 className={styles.emptyTitle}>No courses found</h3>
+                  <p className={styles.emptyDescription}>
+                    Try adjusting your search or filter criteria
+                  </p>
                   <Button
-                    variant={course.isEnrolled ? "outline" : "primary"}
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEnroll(course.id);
+                    variant="outline"
+                    onClick={() => {
+                      setSearchTerm("");
+                      setSelectedLevel("all");
                     }}
                   >
-                    {course.isEnrolled ? "Continue" : "Enroll"}
+                    Clear Filters
                   </Button>
                 </div>
               </div>
-            </Card>
-          ))}
-        </div>
-
-        {filteredCourses.length === 0 && (
-          <div className={styles.emptyState}>
-            <div className={styles.emptyContent}>
-              <BookOpen size={64} className={styles.emptyIcon} />
-              <h3 className={styles.emptyTitle}>No courses found</h3>
-              <p className={styles.emptyDescription}>
-                Try adjusting your search or filter criteria
-              </p>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSearchTerm("");
-                  setSelectedLevel("all");
-                }}
-              >
-                Clear Filters
-              </Button>
-            </div>
-          </div>
+            )}
+          </>
         )}
       </div>
     </div>

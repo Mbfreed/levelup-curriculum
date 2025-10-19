@@ -1,5 +1,5 @@
 import React from "react";
-import { useUser } from "../../contexts/UserContext";
+import { useUser } from "../../hooks/useUser";
 import { User, Mail, Calendar, Trophy, Coins, Star, Flame } from "lucide-react";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
@@ -8,30 +8,30 @@ import AchievementCard from "../../components/AchievementCard/AchievementCard";
 import styles from "./Profile.module.css";
 
 const Profile = () => {
-  const { user } = useUser();
+  const { user, profile } = useUser();
 
   const stats = [
     {
       title: "Current Level",
-      value: user.level,
+      value: profile?.current_level || 1,
       icon: Trophy,
       color: "#ffd700",
     },
     {
-      title: "Total EXP",
-      value: user.exp.toLocaleString(),
+      title: "Total Points",
+      value: (profile?.total_points || 0).toLocaleString(),
       icon: Star,
       color: "#4a154b",
     },
     {
-      title: "Platform Coins",
-      value: user.coins,
+      title: "Completed Courses",
+      value: 1,
       icon: Coins,
       color: "#ffd700",
     },
     {
-      title: "Learning Streak",
-      value: `${user.streak} days`,
+      title: "Join Date",
+      value: new Date(profile?.created_at).toLocaleDateString() || "Today",
       icon: Flame,
       color: "#ef4444",
     },
@@ -71,13 +71,15 @@ const Profile = () => {
                 <User size={48} />
               </div>
               <div className={styles.profileInfo}>
-                <h2 className={styles.profileName}>{user.name}</h2>
-                <p className={styles.profileEmail}>{user.email}</p>
+                <h2 className={styles.profileName}>
+                  {profile?.full_name || "User"}
+                </h2>
+                <p className={styles.profileEmail}>{user?.email}</p>
                 <div className={styles.profileMeta}>
                   <div className={styles.metaItem}>
                     <Calendar size={16} />
                     <span>
-                      Joined {new Date(user.joinedDate).toDateString()}
+                      Joined {new Date(profile?.created_at).toDateString()}
                     </span>
                   </div>
                 </div>

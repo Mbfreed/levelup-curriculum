@@ -34,11 +34,24 @@
   flex: 1;
 }
 
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
 .submissionTitle {
   font-size: 18px;
   font-weight: 600;
   color: #111827;
-  margin: 0 0 4px 0;
+  margin: 0;
+}
+
+.userId {
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 500;
 }
 
 .submissionDate {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useCourse } from "../../contexts/CourseContext";
+import { useCourse } from "../../hooks/useCourse";
 import {
   ArrowLeft,
   Star,
@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import styles from "./PeerReview.module.css";
 
 const PeerReview = () => {
@@ -35,15 +36,7 @@ const PeerReview = () => {
   if (!course || !lesson) {
     return (
       <div className={styles.container}>
-        <h1>Lesson not found</h1>
-        <p>The lesson you're looking for doesn't exist.</p>
-        <Button
-          variant="primary"
-          onClick={() => navigate(`/courses/${courseId}`)}
-          icon={<ArrowLeft size={20} />}
-        >
-          Back to Course
-        </Button>
+        <LoadingSpinner size="lg" message="Loading peer review..." />
       </div>
     );
   }

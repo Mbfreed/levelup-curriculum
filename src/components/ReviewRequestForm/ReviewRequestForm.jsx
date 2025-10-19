@@ -55,8 +55,8 @@ const ReviewRequestForm = ({ lesson, onSubmit, onCancel }) => {
       };
 
       await onSubmit(reviewRequest);
-    } catch (error) {
-      console.error("Review request error:", error);
+    } catch {
+      // Review request failed
     } finally {
       setIsSubmitting(false);
     }

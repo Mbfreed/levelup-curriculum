@@ -1,8 +1,17 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-const CourseContext = createContext();
+import React, { useEffect, useState } from "react";
+import {
+  getUserEnrollments,
+  enrollInCourse as enrollInCourseService,
+  getCourseProgress,
+  submitPeerReview as submitPeerReviewService,
+  submitReviewRequest as submitReviewRequestService,
+} from "../services/courseService";
+import { loadAllCourses } from "../utils/courseLoader";
+import { useUser } from "../hooks/useUser";
+import { CourseContext } from "./createCourseContext";
 
 export const CourseProvider = ({ children }) => {
+  const { user } = useUser();
   const [courses, setCourses] = useState([]);
 
   const [currentCourse, _setCurrentCourse] = useState(null);
@@ -16,6 +25,152 @@ export const CourseProvider = ({ children }) => {
     totalLessonsCompleted: 8,
     streak: 7,
   });
+
+  // Load courses from local files on mount, then mark enrollments and progress from Supabase
+  useEffect(() => {
+    const loadCourses = async () => {
+      try {
+        // Load courses from local course.json files (includes modules/lessons structure)
+        const loadedCourses = await loadAllCourses();
+
+        if (loadedCourses && loadedCourses.length > 0) {
+          let finalCourses = loadedCourses;
+
+          // If user is authenticated, fetch their enrollments and progress
+          if (user) {
+            const { enrollments } = await getUserEnrollments(user.id);
+            const enrolledCourseIds = new Set(
+              enrollments?.map((e) => e.course_id) || []
+            );
+
+            // For each enrolled course, fetch progress and mark completed lessons
+            finalCourses = await Promise.all(
+              loadedCourses.map(async (course) => {
+                const courseWithEnrollment = {
+                  ...course,
+                  isEnrolled: enrolledCourseIds.has(course.id),
+                };
+
+                // If course is enrolled, fetch progress
+                if (courseWithEnrollment.isEnrolled) {
+                  const { success: progSuccess, progress: progressData } =
+                    await getCourseProgress(user.id, course.id);
+
+                  // Calculate progress percentage (0 if no data)
+                  let progressPercentage = 0;
+                  let updatedModules = courseWithEnrollment.modules || [];
+
+                  if (progSuccess && progressData && progressData.length > 0) {
+                    // Create a set of completed lesson IDs for quick lookup
+                    const completedLessonIds = new Set(
+                      progressData.map((p) => p.lesson_id)
+                    );
+
+                    // Mark lessons as completed
+                    if (courseWithEnrollment.modules) {
+                      updatedModules = courseWithEnrollment.modules.map(
+                        (module) => ({
+                          ...module,
+                          lessons: (module.lessons || []).map((lesson) => ({
+                            ...lesson,
+                            isCompleted: completedLessonIds.has(lesson.id),
+                          })),
+                        })
+                      );
+                    }
+                  }
+
+                  // Apply lesson locking logic
+                  const allLessons = getAllLessons({
+                    ...courseWithEnrollment,
+                    modules: updatedModules,
+                  });
+
+                  // Lock lessons: first is unlocked, rest are locked unless previous is completed
+                  updatedModules = updatedModules.map((module) => ({
+                    ...module,
+                    lessons: (module.lessons || []).map((lesson) => {
+                      const lessonPosition = allLessons.findIndex(
+                        (l) => l.id === lesson.id
+                      );
+
+                      // First lesson is always unlocked
+                      if (lessonPosition === 0) {
+                        return { ...lesson, isLocked: false };
+                      }
+
+                      // Other lessons: unlock only if previous is completed
+                      const previousLesson = allLessons[lessonPosition - 1];
+                      const isLocked =
+                        previousLesson && !previousLesson.isCompleted;
+                      return { ...lesson, isLocked };
+                    }),
+                  }));
+
+                  // Calculate progress percentage
+                  const allLessonsUpdated = getAllLessons({
+                    ...courseWithEnrollment,
+                    modules: updatedModules,
+                  });
+                  const completedCount = allLessonsUpdated.filter(
+                    (l) => l.isCompleted
+                  ).length;
+                  progressPercentage = Math.round(
+                    (completedCount / allLessonsUpdated.length) * 100
+                  );
+
+                  return {
+                    ...courseWithEnrollment,
+                    modules: updatedModules,
+                    progress: progressPercentage,
+                    isCompleted: progressPercentage === 100,
+                  };
+                } else {
+                  // User is authenticated but NOT enrolled - lock all lessons
+                  const lockedModules = courseWithEnrollment.modules.map(
+                    (module) => ({
+                      ...module,
+                      lessons: (module.lessons || []).map((lesson) => ({
+                        ...lesson,
+                        isLocked: true,
+                        isCompleted: false,
+                      })),
+                    })
+                  );
+                  return {
+                    ...courseWithEnrollment,
+                    modules: lockedModules,
+                    progress: 0,
+                    isCompleted: false,
+                  };
+                }
+              })
+            );
+          } else {
+            // User not authenticated, no enrollments - all lessons locked
+            finalCourses = loadedCourses.map((c) => ({
+              ...c,
+              isEnrolled: false,
+              modules: (c.modules || []).map((module) => ({
+                ...module,
+                lessons: (module.lessons || []).map((lesson) => ({
+                  ...lesson,
+                  isLocked: true, // All lessons locked for non-enrolled courses
+                  isCompleted: false,
+                })),
+              })),
+            }));
+          }
+
+          setCourses(finalCourses);
+        }
+      } catch {
+        // Silently fail to load courses
+      }
+    };
+
+    loadCourses();
+  }, [user]);
   const [notifications, setNotifications] = useState([]);
   const [submissions, setSubmissions] = useState({
     "sample-1": {
@@ -236,7 +391,6 @@ export const CourseProvider = ({ children }) => {
   const dataUrl = new URL("/src/courses.json", import.meta.url).href;
 
   useEffect(() => {
-    console.log("Fetching courses from:", dataUrl);
     fetch(dataUrl)
       .then((res) => res.json())
       .then((data) => setCourses(data.courses))
@@ -267,14 +421,25 @@ export const CourseProvider = ({ children }) => {
     return courses.find((course) => course.id === courseId);
   };
 
-  const enrollInCourse = (courseId) => {
-    setCourses((prevCourses) =>
-      prevCourses.map((course) =>
-        course.id === courseId
-          ? { ...course, isEnrolled: true, progress: 0 }
-          : course
-      )
-    );
+  const enrollInCourse = async (courseId) => {
+    if (!user) {
+      console.error("User not authenticated");
+      return false;
+    }
+    try {
+      await enrollInCourseService(user.id, courseId);
+      setCourses((prevCourses) =>
+        prevCourses.map((course) =>
+          course.id === courseId
+            ? { ...course, isEnrolled: true, progress: 0 }
+            : course
+        )
+      );
+      return true;
+    } catch (error) {
+      console.error("Error enrolling in course:", error);
+      return false;
+    }
   };
 
   const updateCourseProgress = (courseId, newProgress) => {
@@ -436,52 +601,110 @@ export const CourseProvider = ({ children }) => {
     );
   };
 
-  const submitPeerReview = (submissionId, review) => {
-    const reviewId = `review-${Date.now()}`;
-    const peerReview = {
-      id: reviewId,
-      reviewerId: "1", // Current user ID
-      rating: review.rating,
-      feedback: review.feedback,
-      submittedAt: new Date().toISOString(),
-    };
+  const submitPeerReview = async (submissionId, review) => {
+    if (!user) {
+      addNotification("Must be logged in to submit reviews", "error");
+      return null;
+    }
 
-    setSubmissions((prev) => ({
-      ...prev,
-      [submissionId]: {
-        ...prev[submissionId],
-        peerReviews: [...(prev[submissionId]?.peerReviews || []), peerReview],
-      },
-    }));
+    try {
+      // Submit to backend
+      const {
+        success,
+        review: savedReview,
+        error,
+      } = await submitPeerReviewService(
+        user.id,
+        submissionId,
+        review.rating,
+        review.feedback
+      );
 
-    // Award EXP for peer review
-    addExp(10, "peer review");
-    addCoins(5, "peer review");
+      if (!success) {
+        addNotification(error || "Failed to submit review", "error");
+        return null;
+      }
 
-    return reviewId;
+      // Update local state
+      setSubmissions((prev) => ({
+        ...prev,
+        [submissionId]: {
+          ...prev[submissionId],
+          peerReviews: [
+            ...(prev[submissionId]?.peerReviews || []),
+            {
+              id: savedReview.id,
+              reviewerId: user.id,
+              rating: savedReview.rating,
+              feedback: savedReview.feedback,
+              submittedAt: savedReview.created_at,
+            },
+          ],
+        },
+      }));
+
+      // Award EXP for peer review
+      addExp(10, "peer review");
+      addCoins(5, "peer review");
+
+      addNotification("Review submitted successfully!", "success");
+      return savedReview.id;
+    } catch {
+      addNotification("Error submitting review", "error");
+      return null;
+    }
   };
 
   const getReviewRequestsForLesson = (lessonId) => {
     return reviewRequests[lessonId] || [];
   };
 
-  const submitReviewRequest = (courseId, lessonId, request) => {
-    const requestId = `req-${Date.now()}`;
-    const newRequest = {
-      id: requestId,
-      userId: "current-user",
-      userName: "Current User",
-      ...request,
-      submittedAt: new Date().toISOString(),
-      status: "open",
-      reviews: [],
-    };
+  const submitReviewRequest = async (courseId, lessonId, request) => {
+    if (!user) {
+      addNotification("Must be logged in to request a review", "error");
+      return null;
+    }
 
-    setReviewRequests((prevRequests) => ({
-      ...prevRequests,
-      [lessonId]: [...(prevRequests[lessonId] || []), newRequest],
-    }));
-    return requestId;
+    try {
+      // Submit to backend
+      const {
+        success,
+        request: savedRequest,
+        error,
+      } = await submitReviewRequestService(
+        user.id,
+        courseId,
+        lessonId,
+        request
+      );
+
+      if (!success) {
+        addNotification(error || "Failed to submit review request", "error");
+        return null;
+      }
+
+      // Also update local state for immediate UI feedback
+      const requestId = savedRequest.id;
+      const newRequest = {
+        id: requestId,
+        userId: user.id,
+        userName: user.user_metadata?.full_name || user.email || "You",
+        ...request,
+        submittedAt: savedRequest.created_at,
+        status: "open",
+        reviews: [],
+      };
+
+      setReviewRequests((prevRequests) => ({
+        ...prevRequests,
+        [lessonId]: [...(prevRequests[lessonId] || []), newRequest],
+      }));
+
+      return requestId;
+    } catch {
+      addNotification("Error submitting review request", "error");
+      return null;
+    }
   };
 
   const submitReviewFeedback = (requestId, feedback) => {
@@ -578,24 +801,25 @@ export const CourseProvider = ({ children }) => {
     }, 10000);
   };
 
-  const addExp = (amount, source = "") => {
+  const addExp = (amount) => {
     setUserStats((prev) => {
       const newExp = prev.exp + amount;
+      const oldLevel = prev.level;
       const newLevel = Math.floor(newExp / 500) + 1; // 500 EXP per level
 
-      // const leveledUp = newLevel > prev.level;
+      // Detect level-up
+      if (newLevel > oldLevel) {
+        // Show level-up notification
+        addNotification(
+          `🎉 Level Up! You've reached Level ${newLevel}!`,
+          "success"
+        );
 
-      // if (leveledUp) {
-      //   addNotification(
-      //     `🎉 Level Up! You're now level ${newLevel}!`,
-      //     "success"
-      //   );
-      // } else if (amount > 0) {
-      //   addNotification(
-      //     `+${amount} EXP earned${source ? ` for ${source}` : ""}!`,
-      //     "success"
-      //   );
-      // }
+        // Record the level claim for token rewards (if user is logged in)
+        if (user) {
+          recordLevelUpClaim(user.id, newLevel);
+        }
+      }
 
       return {
         ...prev,
@@ -603,6 +827,15 @@ export const CourseProvider = ({ children }) => {
         level: newLevel,
       };
     });
+  };
+
+  const recordLevelUpClaim = async (userId, level) => {
+    try {
+      const { recordLevelClaim } = await import("../services/courseService");
+      await recordLevelClaim(userId, level);
+    } catch {
+      // Silently fail - not critical if claim isn't recorded
+    }
   };
 
   const addCoins = (amount, source = "") => {
@@ -663,12 +896,4 @@ export const CourseProvider = ({ children }) => {
   return (
     <CourseContext.Provider value={value}>{children}</CourseContext.Provider>
   );
-};
-
-export const useCourse = () => {
-  const context = useContext(CourseContext);
-  if (!context) {
-    throw new Error("useCourse must be used within a CourseProvider");
-  }
-  return context;
 };

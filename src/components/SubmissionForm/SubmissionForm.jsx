@@ -57,8 +57,8 @@ const SubmissionForm = ({ lesson, onSubmit, onCancel }) => {
       };
 
       await onSubmit(submission);
-    } catch (error) {
-      console.error("Submission error:", error);
+    } catch {
+      // Submission failed
     } finally {
       setIsSubmitting(false);
     }

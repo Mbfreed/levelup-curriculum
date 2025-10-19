@@ -28,6 +28,20 @@
   margin: 0 0 24px 0;
 }
 
+.progressSection {
+  margin-bottom: 24px;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
 .meta {
   display: flex;
   gap: 24px;

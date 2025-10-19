@@ -14,7 +14,7 @@ import {
   LogOut,
   Menu,
 } from "lucide-react";
-import { useUser } from "../../contexts/UserContext";
+import { useUser } from "../../hooks/useUser";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import MobileMenu from "../MobileMenu/MobileMenu";

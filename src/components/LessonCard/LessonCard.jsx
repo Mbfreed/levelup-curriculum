@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Play,
   CheckCircle,
@@ -6,15 +6,17 @@ import {
   Upload,
   MessageSquare,
   Eye,
+  Loader,
 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import Card from "../Card/Card";
 import Button from "../Button/Button";
 import styles from "./LessonCard.module.css";
-import { MarkdownLoader } from "../MarkdownLoader/MarkdownLoader";
+import { fetchLessonMarkdown } from "../../services/courseService";
 
 const LessonCard = ({
   lesson,
-  // courseId,
+  courseId,
   submissions = [],
   reviewRequests = [],
   onMarkComplete,
@@ -22,7 +24,32 @@ const LessonCard = ({
   onShowReviewRequestForm,
   onShowSubmissions,
   onShowReviewRequests,
+  isCompletingLesson = false,
+  isSubmittingAssignment = false,
 }) => {
+  const [markdownContent, setMarkdownContent] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (lesson.filePath && courseId) {
+      setIsLoading(true);
+      setError(null);
+      fetchLessonMarkdown(courseId, lesson.filePath)
+        .then(({ success, content, error: fetchError }) => {
+          if (success) {
+            setMarkdownContent(content);
+          } else {
+            setError(fetchError);
+          }
+        })
+        .catch((err) => {
+          setError(err.message);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [lesson, courseId]);
+
   return (
     <Card className={styles.lessonCard}>
       <div className={styles.lessonHeader}>
@@ -45,30 +72,20 @@ const LessonCard = ({
       </div>
 
       <div className={styles.lessonContent}>
-        {lesson.content ? (
-          <MarkdownLoader path={lesson.content} />
+        {lesson.filePath ? (
+          isLoading ? (
+            <div className={styles.loading}>Loading lesson content...</div>
+          ) : error ? (
+            <div className={styles.error}>
+              Failed to load lesson content: {error}
+            </div>
+          ) : (
+            <div className={styles.markdown}>
+              <ReactMarkdown>{markdownContent}</ReactMarkdown>
+            </div>
+          )
         ) : (
-          <div>
-            <h4>📚 Learning Materials</h4>
-            <p>
-              This lesson covers the fundamentals of{" "}
-              {lesson.title.toLowerCase()}. Here's what you'll learn:
-            </p>
-            <ul>
-              <li>Key concepts and principles</li>
-              <li>Practical examples and demonstrations</li>
-              <li>Hands-on exercises</li>
-              <li>Best practices and tips</li>
-            </ul>
-
-            <h4>🎯 Learning Objectives</h4>
-            <p>By the end of this lesson, you will be able to:</p>
-            <ul>
-              <li>Understand the core concepts</li>
-              <li>Apply the knowledge in practical scenarios</li>
-              <li>Identify common patterns and solutions</li>
-            </ul>
-          </div>
+          <div>No Lesson Found</div>
         )}
 
         {/* Show completion banner if completed */}
@@ -87,8 +104,14 @@ const LessonCard = ({
       </div>
 
       <div className={styles.lessonActions}>
-        {lesson.isCompleted ? (
-          <div className={styles.completedActions}>
+        {lesson.isLocked ? (
+          <div className={styles.locked}>
+            <Lock size={20} className={styles.lockedIcon} />
+            <span>Locked - Complete previous lesson</span>
+          </div>
+        ) : (
+          <>
+            {/* Show View Submissions if user has submitted */}
             {submissions.length > 0 && (
               <Button
                 variant="outline"
@@ -99,6 +122,8 @@ const LessonCard = ({
                 View Submissions
               </Button>
             )}
+
+            {/* Show Review Others if there are peer requests */}
             {reviewRequests.length > 0 && (
               <Button
                 variant="primary"
@@ -108,40 +133,63 @@ const LessonCard = ({
                 Review Others
               </Button>
             )}
-          </div>
-        ) : lesson.isLocked ? (
-          <div className={styles.locked}>
-            <Lock size={20} className={styles.lockedIcon} />
-            <span>Locked - Complete previous lesson</span>
-          </div>
-        ) : lesson.type === "assignment" || lesson.type === "project" ? (
-          <div className={styles.submissionActions}>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={onShowReviewRequestForm}
-              icon={<MessageSquare size={20} />}
-            >
-              Request Review
-            </Button>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={onShowSubmissionForm}
-              icon={<Upload size={20} />}
-            >
-              Submit Assignment
-            </Button>
-          </div>
-        ) : (
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={onMarkComplete}
-            icon={<CheckCircle size={20} />}
-          >
-            Mark as Complete
-          </Button>
+
+            {/* If lesson not completed and it's assignment type, show submission actions */}
+            {!lesson.isCompleted &&
+              (lesson.type === "assignment" || lesson.type === "project") && (
+                <div className={styles.submissionActions}>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    disabled={isSubmittingAssignment}
+                    onClick={onShowReviewRequestForm}
+                    icon={<MessageSquare size={20} />}
+                  >
+                    Request Review
+                  </Button>
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    disabled={isSubmittingAssignment}
+                    icon={
+                      isSubmittingAssignment ? (
+                        <Loader size={20} className={styles.spinning} />
+                      ) : (
+                        <Upload size={20} />
+                      )
+                    }
+                    onClick={onShowSubmissionForm}
+                  >
+                    {isSubmittingAssignment
+                      ? "Submitting..."
+                      : "Submit Assignment"}
+                  </Button>
+                </div>
+              )}
+
+            {/* If lesson not completed and no submissions/review requests yet, show Mark as Complete */}
+            {!lesson.isCompleted &&
+              submissions.length === 0 &&
+              reviewRequests.length === 0 &&
+              lesson.type !== "assignment" &&
+              lesson.type !== "project" && (
+                <Button
+                  variant="primary"
+                  size="lg"
+                  disabled={isCompletingLesson}
+                  icon={
+                    isCompletingLesson ? (
+                      <Loader size={20} className={styles.spinning} />
+                    ) : (
+                      <CheckCircle size={20} />
+                    )
+                  }
+                  onClick={onMarkComplete}
+                >
+                  {isCompletingLesson ? "Completing..." : "Mark as Complete"}
+                </Button>
+              )}
+          </>
         )}
       </div>
     </Card>

@@ -103,14 +103,12 @@ Any guidance would be greatly appreciated!`,
     if (!replyText.trim()) return;
 
     // In real app, this would submit to backend
-    console.log("Submitting reply:", replyText);
     setReplyText("");
     setShowReplyForm(false);
   };
 
-  const handleLikeReply = (replyId) => {
+  const handleLikeReply = () => {
     // In real app, this would update like count
-    console.log("Liked reply:", replyId);
   };
 
   return (

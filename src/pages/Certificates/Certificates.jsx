@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCourse } from "../../contexts/CourseContext";
+import { useCourse } from "../../hooks/useCourse";
 import {
   Trophy,
   Award,

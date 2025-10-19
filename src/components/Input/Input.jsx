@@ -5,6 +5,7 @@ const Input = ({
   label,
   error,
   helperText,
+  helpText, // Accept both spellings for compatibility
   icon,
   iconPosition = "left",
   size = "md",
@@ -12,6 +13,9 @@ const Input = ({
   className = "",
   ...props
 }) => {
+  // Use helperText if provided, otherwise fall back to helpText
+  const finalHelperText = helperText || helpText;
+
   const inputClasses = [
     styles.input,
     styles[size],
@@ -36,8 +40,8 @@ const Input = ({
         )}
       </div>
       {error && <span className={styles.errorText}>{error}</span>}
-      {helperText && !error && (
-        <span className={styles.helperText}>{helperText}</span>
+      {finalHelperText && !error && (
+        <span className={styles.helperText}>{finalHelperText}</span>
       )}
     </div>
   );

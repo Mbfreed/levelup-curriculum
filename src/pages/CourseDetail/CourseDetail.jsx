@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useCourse } from "../../contexts/CourseContext";
+import { useCourse } from "../../hooks/useCourse";
 import {
   Clock,
   Users,
@@ -17,7 +17,9 @@ import {
 } from "lucide-react";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
+import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import ModuleList from "../../components/ModuleList/ModuleList";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import styles from "./CourseDetail.module.css";
 
 const CourseDetail = () => {
@@ -31,17 +33,7 @@ const CourseDetail = () => {
   if (!course) {
     return (
       <div className={styles.container}>
-        <div className={styles.notFound}>
-          <h1>Course not found</h1>
-          <p>The course you're looking for doesn't exist.</p>
-          <Button
-            variant="primary"
-            onClick={() => navigate("/courses")}
-            icon={<ArrowLeft size={20} />}
-          >
-            Back to Courses
-          </Button>
-        </div>
+        <LoadingSpinner size="lg" message="Loading course..." />
       </div>
     );
   }
@@ -77,12 +69,30 @@ const CourseDetail = () => {
     }
   };
 
+  const courseProgress = course.progress || 0;
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.courseInfo}>
           <h1 className={styles.title}>{course.title}</h1>
           <p className={styles.description}>{course.description}</p>
+
+          {course.isEnrolled && (
+            <div className={styles.progressSection}>
+              <div className={styles.progressHeader}>
+                <span>Course Progress</span>
+                <span>{courseProgress}% Complete</span>
+              </div>
+              <ProgressBar
+                progress={courseProgress}
+                max={100}
+                height="12px"
+                showLabel={false}
+                color={courseProgress === 100 ? "#10b981" : "#ffd700"}
+              />
+            </div>
+          )}
 
           <div className={styles.meta}>
             <div className={styles.metaItem}>

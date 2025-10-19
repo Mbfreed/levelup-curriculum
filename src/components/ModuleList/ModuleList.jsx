@@ -92,6 +92,9 @@ const ModuleList = ({
 
               {showProgress && (
                 <div className={styles.moduleProgress}>
+                  <span className={styles.progressLabel}>
+                    {progress}% Complete
+                  </span>
                   <ProgressBar
                     progress={progress}
                     max={100}
