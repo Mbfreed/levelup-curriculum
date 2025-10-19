@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, Trophy } from "lucide-react";
-import { useUser } from "../../contexts/UserContext";
+import { useUser } from "../../hooks/useUser";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 import Card from "../../components/Card/Card";

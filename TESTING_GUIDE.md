@@ -14,10 +14,11 @@ This guide walks through testing the complete user journey in the Level Up platf
 ### 1. Authentication Flow
 
 #### Signup Test
+
 - [ ] Navigate to `/register`
 - [ ] Fill in form:
   - Full Name: "John Doe"
-  - Username: "johndoe" (must be alphanumeric + _ - only)
+  - Username: "johndoe" (must be alphanumeric + \_ - only)
   - Email: "john@example.com"
   - Password: "TestPassword123!"
 - [ ] Click "Sign Up"
@@ -29,6 +30,7 @@ This guide walks through testing the complete user journey in the Level Up platf
   - `current_level`: 1
 
 #### Login Test
+
 - [ ] Logout
 - [ ] Navigate to `/login`
 - [ ] Enter credentials from signup
@@ -37,6 +39,7 @@ This guide walks through testing the complete user journey in the Level Up platf
 - [ ] Avatar shows user's initial (J)
 
 #### Invalid Credentials
+
 - [ ] Try login with wrong email/password
 - [ ] Should show error message
 - [ ] Should not redirect
@@ -44,6 +47,7 @@ This guide walks through testing the complete user journey in the Level Up platf
 ### 2. Dashboard
 
 #### Initial Load
+
 - [ ] After login, dashboard shows:
   - [ ] User stats card: 0 points, Level 1
   - [ ] Progress bar: empty (0/500)
@@ -52,6 +56,7 @@ This guide walks through testing the complete user journey in the Level Up platf
 - [ ] Verify stats are from user record in database
 
 #### Course Cards
+
 - [ ] Each course card shows:
   - [ ] Course title
   - [ ] Description
@@ -61,6 +66,7 @@ This guide walks through testing the complete user journey in the Level Up platf
 ### 3. Course Catalog
 
 #### Browse Courses
+
 - [ ] Click "Courses" in header/sidebar
 - [ ] Page displays all courses from Supabase:
   - [ ] Web Development Basics
@@ -69,12 +75,14 @@ This guide walks through testing the complete user journey in the Level Up platf
 - [ ] Each course shows: title, description, level, duration
 
 #### Filter & Sort
+
 - [ ] Filter by "Beginner" level
 - [ ] Should show only beginner courses
 - [ ] Try other levels
 - [ ] Sort by "Newest" (should work without errors)
 
 #### Enroll in Course
+
 - [ ] Click "Enroll Now" on "Web Development Basics"
 - [ ] Button changes to "Loading..."
 - [ ] After ~2 seconds, button changes to "Continue Learning"
@@ -85,6 +93,7 @@ This guide walks through testing the complete user journey in the Level Up platf
 ### 4. Lesson Viewing
 
 #### View First Lesson
+
 - [ ] From course catalog, click "Continue Learning" on "Web Development Basics"
 - [ ] Should navigate to lesson viewer
 - [ ] Displays markdown content from GitHub (lesson 1 content appears)
@@ -95,6 +104,7 @@ This guide walks through testing the complete user journey in the Level Up platf
 - [ ] Button shows "Mark as Complete"
 
 #### Mark Lesson Complete
+
 - [ ] Click "Mark as Complete" button
 - [ ] Button becomes disabled
 - [ ] Notification appears: "+10 points earned!" (or similar)
@@ -107,6 +117,7 @@ This guide walks through testing the complete user journey in the Level Up platf
   - [ ] `users` table: `total_points` = 10
 
 #### Lesson Navigation
+
 - [ ] Click "Next Lesson" button
 - [ ] Should navigate to next lesson in same module
 - [ ] Verify markdown content loaded from GitHub
@@ -114,6 +125,7 @@ This guide walks through testing the complete user journey in the Level Up platf
 - [ ] Points increase to 20
 
 #### Complete Multiple Lessons
+
 - [ ] Continue marking lessons complete (at least 50 lessons for level up)
 - [ ] After 50 lessons (500 points): Level should auto-update to 2
 - [ ] Notification: "Level Up! You are now Level 2! 🎉"
@@ -122,21 +134,24 @@ This guide walks through testing the complete user journey in the Level Up platf
 ### 5. Progress Tracking
 
 #### Course Progress
+
 - [ ] Dashboard "Continue Learning" shows progress:
   - [ ] "Web Development Basics: 50/X lessons (XX%)"
 - [ ] Click course → view progress in lesson viewer sidebar
 
 #### Point Calculation
+
 - [ ] Each lesson = 10 points
 - [ ] Current level = floor(total_points / 500) + 1
 - [ ] At 10 points → Level 1 (not changed yet)
 - [ ] At 500 points → Level 2
 - [ ] At 1000 points → Level 3
-- [ ] Progress bar shows: (total_points % 500) / 500 * 100
+- [ ] Progress bar shows: (total_points % 500) / 500 \* 100
 
 ### 6. Profile Page
 
 #### View Profile
+
 - [ ] Click "Profile" in header/sidebar
 - [ ] Shows user information:
   - [ ] Full Name: "John Doe"
@@ -147,6 +162,7 @@ This guide walks through testing the complete user journey in the Level Up platf
   - [ ] Completed Courses: 0 (initially)
 
 #### Edit Profile
+
 - [ ] Click "Edit Profile" button
 - [ ] Full Name: change to "John Smith"
 - [ ] Wallet Address: enter "0x1234567890abcdef1234567890abcdef12345678"
@@ -158,11 +174,13 @@ This guide walks through testing the complete user journey in the Level Up platf
 - [ ] Page refreshes with new data
 
 #### Claim Tokens (Before Level Up)
+
 - [ ] If level < 2: "Token Claiming" section shows:
   - [ ] "Reach Level 2 to claim your first tokens!"
 - [ ] No claim button available
 
 #### Claim Tokens (After Level Up)
+
 - [ ] After reaching Level 2:
   - [ ] "Claimable Tokens: 50" (from TOKEN_SCALING[2])
 - [ ] Click "Claim Level X Tokens" button
@@ -176,6 +194,7 @@ This guide walks through testing the complete user journey in the Level Up platf
   - [ ] Record shows claim timestamp
 
 #### Completed Courses
+
 - [ ] If no courses completed: "No completed courses yet"
 - [ ] After completing a full course:
   - [ ] Course appears in list
@@ -184,6 +203,7 @@ This guide walks through testing the complete user journey in the Level Up platf
 ### 7. End-to-End Flow
 
 **Complete Journey:**
+
 1. [ ] Signup as new user
 2. [ ] See dashboard with 0 points, Level 1
 3. [ ] Enroll in "Web Development Basics"
@@ -200,6 +220,7 @@ This guide walks through testing the complete user journey in the Level Up platf
 ### 8. Error Handling
 
 #### Invalid Operations
+
 - [ ] Try to enroll twice in same course:
   - [ ] Should show "Already enrolled" or skip duplicate
 - [ ] Try to mark same lesson complete twice:
@@ -210,6 +231,7 @@ This guide walks through testing the complete user journey in the Level Up platf
   - [ ] Should show error message
 
 #### Network Errors
+
 - [ ] Open browser dev tools → Network tab
 - [ ] Throttle to "Slow 3G"
 - [ ] Try enrolling in course
@@ -221,35 +243,43 @@ This guide walks through testing the complete user journey in the Level Up platf
 After completing above tests, verify in Supabase:
 
 **users table:**
+
 ```sql
 SELECT id, full_name, username, total_points, current_level, wallet_address
 FROM users
 WHERE username = 'johndoe';
 ```
+
 Expected: Points increasing, level correct, wallet set
 
 **enrollments table:**
+
 ```sql
 SELECT user_id, course_id, enrolled_at
 FROM enrollments
 WHERE user_id = (SELECT id FROM users WHERE username = 'johndoe');
 ```
+
 Expected: 1 row for Web Development Basics
 
 **progress table:**
+
 ```sql
 SELECT COUNT(*) as lessons_completed, MAX(updated_at) as last_completed
 FROM progress
 WHERE user_id = (SELECT id FROM users WHERE username = 'johndoe');
 ```
+
 Expected: 50+ lessons
 
 **token_claims table:**
+
 ```sql
 SELECT level, amount, claimed_at
 FROM token_claims
 WHERE user_id = (SELECT id FROM users WHERE username = 'johndoe');
 ```
+
 Expected: Rows for each level claimed
 
 ### 10. Known Limitations (MVP)
@@ -264,22 +294,26 @@ Expected: Rows for each level claimed
 ## Debugging Tips
 
 ### Issue: Lessons not loading
+
 - Check browser console for errors
 - Verify GitHub repo is accessible
 - Check courseUtils.js `fetchLessonMarkdown()` function
 - Ensure course.json has correct filePath for lessons
 
 ### Issue: Points not updating
+
 - Open browser DevTools → Network tab
 - Check POST to `/recordLessonCompletion` call
 - Verify Supabase RLS policies allow user update
 
 ### Issue: Level not updating
+
 - Check Supabase: `SELECT floor(total_points / 500) + 1 AS level`
 - Verify calculation in UserContext.jsx `addPoints()` function
 - Check notification trigger in LessonViewerNew.jsx
 
 ### Issue: Enrollments fail
+
 - Check if user_id is correctly retrieved from context
 - Verify Supabase RLS policy on enrollments table
 - Check GitHub token rate limits (if many enrolls in short time)
@@ -296,6 +330,7 @@ Expected: Rows for each level claimed
 ## Next Steps
 
 Once testing complete:
+
 1. Deploy to production (Vercel recommended)
 2. Create admin panel for course management
 3. Implement assignment submission system

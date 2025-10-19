@@ -63,16 +63,17 @@ export const fetchLessonMarkdown = async (courseId, filePath) => {
     const response = await fetch(url);
 
     if (!response.ok) {
-      console.error(
-        `Failed to fetch markdown from ${url}: ${response.status}`
-      );
+      console.error(`Failed to fetch markdown from ${url}: ${response.status}`);
       return null;
     }
 
     const content = await response.text();
     return content;
   } catch (error) {
-    console.error(`Error fetching lesson markdown for ${courseId}/${filePath}:`, error);
+    console.error(
+      `Error fetching lesson markdown for ${courseId}/${filePath}:`,
+      error
+    );
     return null;
   }
 };
@@ -196,21 +197,19 @@ export const recordLessonCompletion = async (
 
     // Record or update progress
     const now = new Date().toISOString();
-    const { error: progressError } = await supabase
-      .from("progress")
-      .upsert(
-        [
-          {
-            user_id: userId,
-            course_id: courseId,
-            module_id: moduleId,
-            lesson_id: lessonId,
-            completed_at: now,
-            points_earned: points,
-          },
-        ],
-        { onConflict: "user_id,lesson_id" }
-      );
+    const { error: progressError } = await supabase.from("progress").upsert(
+      [
+        {
+          user_id: userId,
+          course_id: courseId,
+          module_id: moduleId,
+          lesson_id: lessonId,
+          completed_at: now,
+          points_earned: points,
+        },
+      ],
+      { onConflict: "user_id,lesson_id" }
+    );
 
     if (progressError) {
       console.error("Error recording progress:", progressError);
@@ -251,7 +250,7 @@ export const recordLessonCompletion = async (
       success: true,
       newLevel,
       totalPoints: newTotalPoints,
-      leveledUp: newLevel > Math.floor(((userData?.total_points || 0)) / 500) + 1,
+      leveledUp: newLevel > Math.floor((userData?.total_points || 0) / 500) + 1,
     };
   } catch (error) {
     console.error("Record lesson completion error:", error);

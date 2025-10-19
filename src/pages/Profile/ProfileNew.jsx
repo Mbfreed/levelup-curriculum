@@ -196,7 +196,11 @@ const ProfileNew = () => {
 
       {message && (
         <div className={`${styles.message} ${styles[message.type]}`}>
-          {message.type === "success" ? <Check size={20} /> : <AlertCircle size={20} />}
+          {message.type === "success" ? (
+            <Check size={20} />
+          ) : (
+            <AlertCircle size={20} />
+          )}
           <p>{message.text}</p>
         </div>
       )}
@@ -239,11 +243,7 @@ const ProfileNew = () => {
               </div>
 
               <div className={styles.formGroup}>
-                <Input
-                  label="Email"
-                  value={user.email}
-                  disabled
-                />
+                <Input label="Email" value={user.email} disabled />
               </div>
 
               <div className={styles.formGroup}>
@@ -264,10 +264,7 @@ const ProfileNew = () => {
                 >
                   Save Changes
                 </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => setEditMode(false)}
-                >
+                <Button variant="secondary" onClick={() => setEditMode(false)}>
                   Cancel
                 </Button>
               </div>
@@ -301,11 +298,7 @@ const ProfileNew = () => {
                       className={styles.copyButton}
                       title="Copy wallet address"
                     >
-                      {copiedAddress ? (
-                        <Check size={16} />
-                      ) : (
-                        <Copy size={16} />
-                      )}
+                      {copiedAddress ? <Check size={16} /> : <Copy size={16} />}
                     </button>
                   </div>
                 </div>

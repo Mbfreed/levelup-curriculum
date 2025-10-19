@@ -5,6 +5,7 @@ Essential commands and references for Level Up platform.
 ## 🚀 Getting Started
 
 ### Development
+
 ```bash
 # Install dependencies
 npm install
@@ -21,6 +22,7 @@ npm run preview
 ```
 
 ### Environment Setup
+
 ```bash
 # Copy example env file
 cp .env.example .env.local
@@ -33,6 +35,7 @@ VITE_SUPABASE_ANON_KEY=[your-anon-key]
 ## 📁 Key Files Reference
 
 ### Core State & Config
+
 ```
 src/contexts/UserContext.jsx          → User auth & profile state
 src/contexts/CourseContextSupabase.jsx → Course & lesson state
@@ -43,6 +46,7 @@ src/App.jsx                            → App root with providers
 ```
 
 ### Pages (Updated for Supabase)
+
 ```
 src/pages/CourseCatalog/CourseCatalogNew.jsx     → Browse courses
 src/pages/LessonViewer/LessonViewerNew.jsx       → View lessons
@@ -51,6 +55,7 @@ src/pages/Profile/ProfileNew.jsx                 → User profile
 ```
 
 ### Backend
+
 ```
 supabase/functions/sync-courses/index.ts  → Course sync Edge Function
 supabase/migrations/                       → Database schema (if using)
@@ -58,38 +63,39 @@ supabase/migrations/                       → Database schema (if using)
 
 ## 📖 Documentation
 
-| Document | Purpose |
-|----------|---------|
-| README.md | Project overview - START HERE |
-| COMPLETION_SUMMARY.md | What was built (this session) |
-| PROJECT_STATUS.md | MVP features & roadmap |
-| SUPABASE_INTEGRATION.md | Database setup details |
-| TESTING_GUIDE.md | How to test everything |
-| DEPLOYMENT_GUIDE.md | How to deploy to production |
-| DEVELOPMENT_PROMPTS.md | Contribution guidelines |
+| Document                | Purpose                       |
+| ----------------------- | ----------------------------- |
+| README.md               | Project overview - START HERE |
+| COMPLETION_SUMMARY.md   | What was built (this session) |
+| PROJECT_STATUS.md       | MVP features & roadmap        |
+| SUPABASE_INTEGRATION.md | Database setup details        |
+| TESTING_GUIDE.md        | How to test everything        |
+| DEPLOYMENT_GUIDE.md     | How to deploy to production   |
+| DEVELOPMENT_PROMPTS.md  | Contribution guidelines       |
 
 ## 🔑 API Functions (courseUtils.js)
 
 ### Course Management
+
 ```javascript
-import { 
+import {
   fetchAllCourses,
   fetchCourseById,
   fetchLessonMarkdown,
   enrollCourse,
-  getCourseProgress
-} from './utils/courseUtils';
+  getCourseProgress,
+} from "./utils/courseUtils";
 
 // Get all courses
 const courses = await fetchAllCourses();
 
 // Get specific course
-const course = await fetchCourseById('react-fundamentals');
+const course = await fetchCourseById("react-fundamentals");
 
 // Fetch lesson markdown from GitHub
 const markdown = await fetchLessonMarkdown(
-  'react-fundamentals',
-  'module-1/lesson-1.md'
+  "react-fundamentals",
+  "module-1/lesson-1.md"
 );
 
 // Enroll in course
@@ -100,11 +106,12 @@ const progress = await getCourseProgress(userId, courseId);
 ```
 
 ### Progress & Points
+
 ```javascript
-import { 
+import {
   recordLessonCompletion,
-  fetchLessonProgress
-} from './utils/courseUtils';
+  fetchLessonProgress,
+} from "./utils/courseUtils";
 
 // Record lesson completion (awards points, updates level)
 await recordLessonCompletion(
@@ -112,7 +119,7 @@ await recordLessonCompletion(
   courseId,
   moduleId,
   lessonId,
-  10  // points (default)
+  10 // points (default)
 );
 
 // Get progress for specific lesson/module
@@ -120,14 +127,15 @@ const progress = await fetchLessonProgress(userId, courseId, moduleId);
 ```
 
 ### Token System
+
 ```javascript
-import { claimTokens } from './utils/courseUtils';
+import { claimTokens } from "./utils/courseUtils";
 
 // Claim tokens for a level
 await claimTokens(
   userId,
-  level,           // 1, 2, 3, etc.
-  amount,          // from TOKEN_SCALING
+  level, // 1, 2, 3, etc.
+  amount, // from TOKEN_SCALING
   walletAddress
 );
 ```
@@ -135,6 +143,7 @@ await claimTokens(
 ## 🎯 Common Tasks
 
 ### Add a New User Manually (Dev)
+
 ```bash
 # Via Supabase dashboard:
 # 1. Go to Authentication → Users
@@ -144,6 +153,7 @@ await claimTokens(
 ```
 
 ### Manually Trigger Course Sync
+
 ```bash
 # Replace [URL] and [KEY] with your Supabase credentials
 curl -X POST https://[project-id].supabase.co/functions/v1/sync-courses \
@@ -152,6 +162,7 @@ curl -X POST https://[project-id].supabase.co/functions/v1/sync-courses \
 ```
 
 ### Check Database
+
 ```bash
 # Via Supabase dashboard:
 # 1. Go to SQL Editor
@@ -167,6 +178,7 @@ SELECT * FROM token_claims WHERE user_id = '[user-id]';
 ### Add a Course Content
 
 1. **On GitHub**:
+
    ```
    courses/
    └── my-course/
@@ -176,6 +188,7 @@ SELECT * FROM token_claims WHERE user_id = '[user-id]';
    ```
 
 2. **course.json** structure:
+
    ```json
    {
      "id": "my-course",
@@ -202,22 +215,26 @@ SELECT * FROM token_claims WHERE user_id = '[user-id]';
    ```
 
 3. **Lesson Markdown**:
+
    ```markdown
    # Lesson Title
-   
+
    ## Objectives
+
    - Learn X
    - Build Y
-   
+
    ## Content
+
    Your lesson content...
    ```
 
 4. **Sync**:
+
    ```bash
    # Push to GitHub
    git push origin feature/new-course
-   
+
    # Create PR and merge
    # After merge, manually trigger sync:
    curl -X POST https://[project-id].supabase.co/functions/v1/sync-courses \
@@ -248,6 +265,7 @@ npm run dev
 ## 🚀 Deployment Quick Start
 
 ### Vercel (Recommended)
+
 ```bash
 npm install -g vercel
 vercel
@@ -255,6 +273,7 @@ vercel
 ```
 
 ### Docker
+
 ```bash
 docker build -t levelup .
 docker run -p 3000:3000 levelup
@@ -262,6 +281,7 @@ docker run -p 3000:3000 levelup
 ```
 
 ### Static (GitHub Pages)
+
 ```bash
 npm run build
 npx gh-pages -d dist
@@ -273,6 +293,7 @@ npx gh-pages -d dist
 ## 🐛 Debugging
 
 ### Lesson Markdown Not Loading
+
 ```javascript
 // Check courseUtils.js fetchLessonMarkdown()
 // Verify GitHub URL is correct:
@@ -283,6 +304,7 @@ npx gh-pages -d dist
 ```
 
 ### Points Not Updating
+
 ```javascript
 // 1. Check browser console for errors
 // 2. Open DevTools → Network tab
@@ -296,6 +318,7 @@ SELECT * FROM users WHERE id = 'your-user-id';
 ```
 
 ### Level Not Updating
+
 ```javascript
 // Check calculation: level = floor(total_points / 500) + 1
 // At 0 pts: level 1
@@ -309,6 +332,7 @@ SELECT total_points, current_level FROM users WHERE id = 'your-user-id';
 ## 📊 Database Query Reference
 
 ### User Stats
+
 ```sql
 SELECT id, full_name, username, total_points, current_level, wallet_address
 FROM users
@@ -316,6 +340,7 @@ WHERE username = 'johndoe';
 ```
 
 ### Course Progress
+
 ```sql
 SELECT p.course_id, COUNT(*) as completed_lessons
 FROM progress p
@@ -324,6 +349,7 @@ GROUP BY p.course_id;
 ```
 
 ### Points per User
+
 ```sql
 SELECT user_id, COUNT(*) as lessons_completed, SUM(points_awarded) as total_points
 FROM progress
@@ -331,6 +357,7 @@ GROUP BY user_id;
 ```
 
 ### Token Claims
+
 ```sql
 SELECT user_id, level, amount, claimed_at
 FROM token_claims
@@ -341,6 +368,7 @@ ORDER BY claimed_at DESC;
 ## 🔧 Configuration Reference
 
 ### Environment Variables
+
 ```env
 # .env.local (development)
 VITE_SUPABASE_URL=https://[project-id].supabase.co
@@ -352,30 +380,32 @@ VITE_SUPABASE_ANON_KEY=[prod-anon-key]
 ```
 
 ### Token Scaling
+
 ```javascript
 // From ProfileNew.jsx
 const TOKEN_SCALING = {
-  1: 10,    // Level 1: 10 tokens
-  2: 50,    // Level 2: 50 tokens
-  3: 70,    // Level 3: 70 tokens
-  4: 100,   // Level 4: 100 tokens
-  5: 150,   // Level 5: 150 tokens
-  6: 200,   // Level 6: 200 tokens
+  1: 10, // Level 1: 10 tokens
+  2: 50, // Level 2: 50 tokens
+  3: 70, // Level 3: 70 tokens
+  4: 100, // Level 4: 100 tokens
+  5: 150, // Level 5: 150 tokens
+  6: 200, // Level 6: 200 tokens
   // Add more levels as needed
 };
 ```
 
 ### Points System
+
 ```javascript
 // Constants (from database/UI logic)
-POINTS_PER_LESSON = 10
-POINTS_PER_ASSIGNMENT = 15
-POINTS_PER_LEVEL = 500  // Level up every 500 points
+POINTS_PER_LESSON = 10;
+POINTS_PER_ASSIGNMENT = 15;
+POINTS_PER_LEVEL = 500; // Level up every 500 points
 
 // Formula
-current_level = floor(total_points / 500) + 1
-points_to_next_level = (500 - (total_points % 500))
-progress_percentage = (total_points % 500) / 500 * 100
+current_level = floor(total_points / 500) + 1;
+points_to_next_level = 500 - (total_points % 500);
+progress_percentage = ((total_points % 500) / 500) * 100;
 ```
 
 ## 📚 Useful Links
@@ -390,6 +420,7 @@ progress_percentage = (total_points % 500) / 500 * 100
 ## 🆘 Getting Help
 
 ### Before Asking
+
 1. Check README.md
 2. Check relevant documentation
 3. Check browser console for errors
@@ -397,19 +428,24 @@ progress_percentage = (total_points % 500) / 500 * 100
 5. Check GitHub issues
 
 ### Issue Template
+
 ```markdown
 ## Description
+
 Brief description of the issue
 
 ## Steps to Reproduce
+
 1. ...
 2. ...
 3. ...
 
 ## Expected Behavior
+
 What should happen
 
 ## Actual Behavior
+
 What actually happens
 
 ## Logs/Screenshots

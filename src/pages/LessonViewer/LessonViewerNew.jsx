@@ -9,14 +9,11 @@ import {
 } from "lucide-react";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
-import MarkdownRenderer from "../../components/MarkdownRenderer/MarkdownRenderer";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import styles from "./LessonViewer.module.css";
 import { useCourse } from "../../hooks/useCourse";
 import { useUser } from "../../hooks/useUser";
-import {
-  recordLessonCompletion,
-} from "../../utils/courseUtils";
+import { recordLessonCompletion } from "../../utils/courseUtils";
 
 const LessonViewerNew = () => {
   const { courseId, lessonId } = useParams();
@@ -81,7 +78,9 @@ const LessonViewerNew = () => {
 
       if (result.success) {
         setLessonCompleted(true);
-        const message = `🎉 Lesson completed! +${currentLesson.points || 10} points`;
+        const message = `🎉 Lesson completed! +${
+          currentLesson.points || 10
+        } points`;
         if (result.leveledUp) {
           setCompletionMessage(
             `${message}\n⬆️ Level up! You're now level ${result.newLevel}`
@@ -185,7 +184,9 @@ const LessonViewerNew = () => {
       <div className={styles.container}>
         <div className={styles.mainContent}>
           <Card className={styles.lessonCard}>
-            <MarkdownRenderer content={lessonMarkdown} />
+            <div style={{ whiteSpace: "pre-wrap", fontFamily: "monospace" }}>
+              {lessonMarkdown}
+            </div>
           </Card>
 
           <div className={styles.lessonActions}>

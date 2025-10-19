@@ -98,7 +98,9 @@ const DashboardNew = () => {
       <Card className={styles.progressCard}>
         <div className={styles.progressHeader}>
           <h2>Progress to Level {currentLevel + 1}</h2>
-          <span className={styles.percentage}>{Math.round(progressToNextLevel)}%</span>
+          <span className={styles.percentage}>
+            {Math.round(progressToNextLevel)}%
+          </span>
         </div>
         <div className={styles.progressBar}>
           <div
@@ -106,9 +108,7 @@ const DashboardNew = () => {
             style={{ width: `${progressToNextLevel}%` }}
           />
         </div>
-        <p className={styles.progressText}>
-          {totalPoints % 500} / 500 points
-        </p>
+        <p className={styles.progressText}>{totalPoints % 500} / 500 points</p>
       </Card>
 
       {/* Continue Learning */}
@@ -136,7 +136,9 @@ const DashboardNew = () => {
                       <div
                         className={styles.progressFill}
                         style={{
-                          width: `${courseProgress[course.id]?.percentage || 0}%`,
+                          width: `${
+                            courseProgress[course.id]?.percentage || 0
+                          }%`,
                         }}
                       />
                     </div>
@@ -204,10 +206,7 @@ const DashboardNew = () => {
           <BookOpen size={48} />
           <h3>Ready to start learning?</h3>
           <p>Explore our course catalog and enroll in a course today</p>
-          <Button
-            variant="primary"
-            onClick={() => navigate("/courses")}
-          >
+          <Button variant="primary" onClick={() => navigate("/courses")}>
             Browse Courses
           </Button>
         </Card>

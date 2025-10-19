@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../../contexts/UserContext";
-import { useCourse } from "../../contexts/CourseContext";
+import { useUser } from "../../hooks/useUser";
+import { useCourse } from "../../hooks/useCourse";
 import { Trophy, Coins, Flame, Star } from "lucide-react";
 import WelcomeSection from "../../components/Dashboard/WelcomeSection";
 import StatsGrid from "../../components/Dashboard/StatsGrid";

@@ -5,6 +5,7 @@ A modern, open-source learning platform that rewards users with points, levels, 
 ## 🎯 Vision
 
 Level Up democratizes online learning by:
+
 - **Community-Driven Curriculum**: Anyone can contribute lessons via GitHub PRs
 - **Learn-to-Earn Model**: Earn points and tokens for completing courses
 - **Blockchain-Ready**: NFT certificates prepared for Web3 integration
@@ -14,6 +15,7 @@ Level Up democratizes online learning by:
 ## ✨ Features
 
 ### User Experience
+
 - 🔐 **Secure Authentication**: Email/password with Supabase Auth
 - 📚 **Browse Courses**: Filter and sort curated courses
 - 📖 **Interactive Lessons**: Markdown-based lessons with progress tracking
@@ -23,8 +25,9 @@ Level Up democratizes online learning by:
 - 🪙 **Token Rewards**: Claim tokens upon level-up (10→50→70→100→150→200)
 
 ### Learning Management
+
 - ⏱️ **Progress Tracking**: Auto-save lesson completion with timestamps
-- 📈 **Points System**: 
+- 📈 **Points System**:
   - 10 points per lesson completed
   - 15 points per assignment submitted
   - Auto-level calculation: Level = floor(total_points / 500) + 1
@@ -32,6 +35,7 @@ Level Up democratizes online learning by:
 - 🏆 **Completion Certificates**: NFT-ready certificate generation
 
 ### Content Management
+
 - 🔗 **GitHub Integration**: Fetch courses and lessons from GitHub
 - 📝 **Markdown Lessons**: Write lessons in Markdown, stored in Git
 - 🔄 **Auto-Sync**: Edge Functions sync GitHub changes to Supabase
@@ -40,6 +44,7 @@ Level Up democratizes online learning by:
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 - Supabase account (free tier available)
@@ -48,6 +53,7 @@ Level Up democratizes online learning by:
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/levelupdevs1/levelup-curriculum.git
    cd levelup-curriculum
@@ -55,11 +61,13 @@ Level Up democratizes online learning by:
    ```
 
 2. **Set up Supabase**
+
    - Create free project at [supabase.com](https://supabase.com)
    - Run SQL schema (see [SUPABASE_INTEGRATION.md](./SUPABASE_INTEGRATION.md))
    - Deploy Edge Function: `supabase functions deploy sync-courses`
 
 3. **Configure environment**
+
    ```bash
    cp .env.example .env.local
    # Edit .env.local with your Supabase credentials
@@ -117,21 +125,22 @@ level-up/
 
 Level Up uses Supabase PostgreSQL with 7 core tables:
 
-| Table | Purpose |
-|-------|---------|
-| `users` | User profiles, points, levels, wallet addresses |
-| `courses` | Course metadata and structure |
-| `enrollments` | Track user course enrollments |
-| `progress` | Lesson completion records with timestamps |
-| `completions` | Full course completions (NFT-ready) |
-| `token_claims` | Token claim history per level |
-| `submissions` | Assignment submissions (future) |
+| Table          | Purpose                                         |
+| -------------- | ----------------------------------------------- |
+| `users`        | User profiles, points, levels, wallet addresses |
+| `courses`      | Course metadata and structure                   |
+| `enrollments`  | Track user course enrollments                   |
+| `progress`     | Lesson completion records with timestamps       |
+| `completions`  | Full course completions (NFT-ready)             |
+| `token_claims` | Token claim history per level                   |
+| `submissions`  | Assignment submissions (future)                 |
 
 See [SUPABASE_INTEGRATION.md](./SUPABASE_INTEGRATION.md) for full schema.
 
 ## 🔑 Key Functions
 
 ### Course Management
+
 ```javascript
 // Fetch all courses from Supabase
 const courses = await fetchAllCourses();
@@ -144,6 +153,7 @@ const markdown = await fetchLessonMarkdown(courseId, filePath);
 ```
 
 ### Progress Tracking
+
 ```javascript
 // Record lesson completion (auto-updates points/level)
 await recordLessonCompletion(userId, courseId, moduleId, lessonId, points);
@@ -154,6 +164,7 @@ const progress = await getCourseProgress(userId, courseId);
 ```
 
 ### User Management
+
 ```javascript
 // Award points (auto-calculates new level)
 await addPoints(userId, 10);
@@ -171,6 +182,7 @@ See [courseUtils.js](./src/utils/courseUtils.js) for all 20+ functions.
 
 1. **Fork the repository**
 2. **Create course structure**
+
    ```
    courses/
    └── my-awesome-course/
@@ -183,6 +195,7 @@ See [courseUtils.js](./src/utils/courseUtils.js) for all 20+ functions.
    ```
 
 3. **Write course.json**
+
    ```json
    {
      "id": "my-awesome-course",
@@ -209,17 +222,21 @@ See [courseUtils.js](./src/utils/courseUtils.js) for all 20+ functions.
    ```
 
 4. **Write lessons in Markdown**
+
    ```markdown
    # Lesson Title
-   
+
    ## Learning Objectives
+
    - Understand concept X
    - Build project Y
-   
+
    ## Content
+
    Your lesson content here...
-   
+
    ## Practice Exercise
+
    Try building something...
    ```
 
@@ -237,6 +254,7 @@ npm run dev
 ```
 
 Test checklist includes:
+
 - ✅ Authentication (signup, login)
 - ✅ Course enrollment
 - ✅ Lesson completion and progress tracking
@@ -250,6 +268,7 @@ See [TESTING_GUIDE.md](./TESTING_GUIDE.md) for complete checklist.
 ## 🚀 Deployment
 
 ### Development
+
 ```bash
 npm run dev      # Start dev server on localhost:5173
 npm run build    # Build for production
@@ -261,12 +280,14 @@ npm run preview  # Preview production build
 Choose your deployment platform:
 
 1. **Vercel (Recommended)** - Zero-config deployment
+
    ```bash
    npm install -g vercel
    vercel
    ```
 
 2. **GitHub Pages** - Static hosting
+
    ```bash
    npm run build
    npm run deploy
@@ -283,6 +304,7 @@ See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for full instructions.
 ## 🔧 Tech Stack
 
 ### Frontend
+
 - **React** 18+ - UI library
 - **Vite** - Fast build tool
 - **React Router** - Client-side routing
@@ -291,12 +313,14 @@ See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for full instructions.
 - **CSS Modules** - Component styling
 
 ### Backend
+
 - **Supabase** - PostgreSQL database + Auth + Edge Functions
 - **PostgreSQL** - Relational database
 - **Row Level Security** - User data isolation
 - **TypeScript** - Edge Function type safety
 
 ### Infrastructure
+
 - **GitHub** - Content management (lessons)
 - **Supabase Edge Functions** - GitHub→DB sync
 - **Vercel/Netlify** - Frontend hosting (optional)
@@ -329,6 +353,7 @@ Markdown Lessons (Raw URL)
 ## 📈 Roadmap
 
 ### Phase 1 (Current MVP) ✅
+
 - [x] User authentication and profiles
 - [x] Browse and enroll in courses
 - [x] Complete lessons and track progress
@@ -337,6 +362,7 @@ Markdown Lessons (Raw URL)
 - [x] GitHub-based content management
 
 ### Phase 2 (Coming Soon)
+
 - [ ] Assignment submission system
 - [ ] Peer review functionality
 - [ ] Discussion forums
@@ -344,12 +370,14 @@ Markdown Lessons (Raw URL)
 - [ ] AI-assisted code review
 
 ### Phase 3 (Blockchain Integration)
+
 - [ ] MetaMask wallet connection
 - [ ] NFT certificate minting
 - [ ] Token smart contracts
 - [ ] On-chain reputation system
 
 ### Phase 4 (Advanced Features)
+
 - [ ] Bounty system
 - [ ] Hackathon integration
 - [ ] Streaming video lessons
@@ -388,6 +416,7 @@ This project is licensed under the MIT License - see [LICENSE](./LICENSE) file f
 ## 📞 Contact
 
 Have questions or want to collaborate?
+
 - Email: [team@levelupdevs.com](mailto:team@levelupdevs.com)
 - GitHub: [@levelupdevs1](https://github.com/levelupdevs1)
 

@@ -22,7 +22,7 @@ const CourseCatalogNew = () => {
   const { courses, isLoading, isEnrolled } = useCourse();
   const { user } = useUser();
   const navigate = useNavigate();
-  
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
@@ -214,9 +214,7 @@ const CourseCatalogNew = () => {
                     </div>
                     <div className={styles.metaItem}>
                       <BookOpen size={16} />
-                      <span>
-                        {course.modules?.length || 0} modules
-                      </span>
+                      <span>{course.modules?.length || 0} modules</span>
                     </div>
                     {course.rating && (
                       <div className={styles.metaItem}>

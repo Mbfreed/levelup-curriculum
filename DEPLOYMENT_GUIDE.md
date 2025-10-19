@@ -62,6 +62,7 @@ git push origin main
 ### Environment Variables
 
 In Vercel dashboard:
+
 1. Go to Settings → Environment Variables
 2. Add:
    - Key: `VITE_SUPABASE_URL`
@@ -163,10 +164,10 @@ server {
 server {
     listen 443 ssl http2;
     server_name yourdomain.com;
-    
+
     ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
-    
+
     location / {
         proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
@@ -183,6 +184,7 @@ server {
 ### Automated Backups (Supabase)
 
 Supabase automatically backs up your database daily. Access in dashboard:
+
 - Settings → Backups
 - Download backups as needed
 
@@ -203,14 +205,15 @@ psql postgresql://[user]:[password]@db.[project-id].supabase.co:5432/postgres < 
 Set up error tracking (optional but recommended):
 
 1. **Sentry** (Free tier available):
+
    ```bash
    npm install @sentry/react @sentry/tracing
    ```
-   
+
    ```javascript
    // src/main.jsx
    import * as Sentry from "@sentry/react";
-   
+
    Sentry.init({
      dsn: "YOUR_SENTRY_DSN",
      environment: import.meta.env.MODE,
@@ -250,21 +253,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
-      
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
@@ -366,6 +369,7 @@ git push origin main
 ## Performance Optimization
 
 1. **Frontend**:
+
    ```bash
    npm run build
    # Check bundle size
@@ -374,6 +378,7 @@ git push origin main
    ```
 
 2. **Database Queries**:
+
    - Add indexes for frequently queried columns
    - Use pagination for large result sets
 
@@ -394,16 +399,19 @@ If user base grows:
 ### Common Issues
 
 **Issue: Deployments failing**
+
 - Check build logs in deployment service
 - Verify environment variables are set
 - Test build locally: `npm run build`
 
 **Issue: API requests failing**
+
 - Check CORS settings in Supabase
 - Verify authentication token
 - Check RLS policies
 
 **Issue: Slow performance**
+
 - Check database query performance
 - Review Vercel analytics
 - Optimize bundle size
@@ -456,6 +464,7 @@ Monitor costs in provider dashboards and optimize as needed.
 Your Level Up platform is now live! 🚀
 
 Share your deployment link:
+
 - GitHub repository
 - Social media
 - Community forums

@@ -7,11 +7,13 @@ This document outlines the new Supabase-based architecture and integration point
 ### Frontend Components
 
 1. **Authentication** (`UserContext.jsx`)
+
    - Manages user login/signup via Supabase Auth
    - Stores user profile in Supabase `users` table
    - Auto-syncs user data on auth state changes
 
 2. **Courses** (`CourseContextSupabase.jsx`)
+
    - Fetches courses from Supabase `courses` table
    - Loads lesson markdown from GitHub raw URLs
    - Tracks user enrollments and progress
@@ -69,9 +71,7 @@ import { CourseProvider } from "./contexts/CourseContextSupabase";
 function App() {
   return (
     <UserProvider>
-      <CourseProvider>
-        {/* Routes */}
-      </CourseProvider>
+      <CourseProvider>{/* Routes */}</CourseProvider>
     </UserProvider>
   );
 }
@@ -159,11 +159,13 @@ CREATE TABLE token_claims (
 ### Course Syncing
 
 The Supabase Edge Function `sync-courses` automatically:
+
 1. Fetches all `course.json` files from GitHub
 2. Parses course structure
 3. Updates the `courses` table
 
 **Manual Trigger:**
+
 ```bash
 curl -X POST https://your-project.supabase.co/functions/v1/sync-courses \
   -H "Authorization: Bearer your_anon_key" \
@@ -173,6 +175,7 @@ curl -X POST https://your-project.supabase.co/functions/v1/sync-courses \
 ### Progress Tracking
 
 When a user completes a lesson:
+
 1. `recordLessonCompletion()` is called
 2. Progress record is created
 3. Points are awarded (+10 for lessons, +15 for assignments)
@@ -182,6 +185,7 @@ When a user completes a lesson:
 ### Token Claiming
 
 Users can claim platform tokens when they level up:
+
 - Level 1: 10 tokens
 - Level 2: 50 tokens
 - Level 3: 70 tokens
@@ -190,6 +194,7 @@ Users can claim platform tokens when they level up:
 - Level 6+: 200 tokens
 
 **Requirements:**
+
 - User must connect wallet
 - Tokens recorded in `token_claims` table
 - Blockchain integration (future)
@@ -205,7 +210,7 @@ Level Threshold: 500 points per level
 ### Calculation
 
 ```javascript
-newLevel = Math.floor(totalPoints / 500) + 1
+newLevel = Math.floor(totalPoints / 500) + 1;
 ```
 
 ## File Structure
@@ -256,14 +261,14 @@ src/
 
 ### Old vs New
 
-| Feature | Firebase | Supabase |
-|---------|----------|----------|
-| Auth | Firebase Auth | Supabase Auth |
-| Database | Firestore | PostgreSQL |
-| User Data | Firestore | `users` table |
-| Courses | JSON file | `courses` table |
-| Progress | Firestore | `progress` table |
-| Enrollments | Firestore | `enrollments` table |
+| Feature     | Firebase      | Supabase            |
+| ----------- | ------------- | ------------------- |
+| Auth        | Firebase Auth | Supabase Auth       |
+| Database    | Firestore     | PostgreSQL          |
+| User Data   | Firestore     | `users` table       |
+| Courses     | JSON file     | `courses` table     |
+| Progress    | Firestore     | `progress` table    |
+| Enrollments | Firestore     | `enrollments` table |
 
 ### Removing Firebase
 
@@ -300,6 +305,7 @@ src/
 ## Support
 
 For issues with:
+
 - **Auth**: Check UserContext and Supabase Auth settings
 - **Courses**: Verify sync function and GitHub URLs
 - **Progress**: Check progress table RLS policies

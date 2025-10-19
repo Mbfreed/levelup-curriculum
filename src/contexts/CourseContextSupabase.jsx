@@ -133,9 +133,9 @@ const CourseProvider = ({ children }) => {
   };
 
   return (
-    <CourseContextNew.Provider value={value}>
+    <CourseContext.Provider value={value}>
       {children}
-    </CourseContextNew.Provider>
+    </CourseContext.Provider>
   );
 };
 

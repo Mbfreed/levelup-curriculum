@@ -1,5 +1,5 @@
 import React from "react";
-import { useUser } from "../../contexts/UserContext";
+import { useUser } from "../../hooks/useUser";
 import { User, Mail, Calendar, Trophy, Coins, Star, Flame } from "lucide-react";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
