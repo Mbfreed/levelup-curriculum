@@ -3,9 +3,7 @@
   "title": "React Fundamentals",
   "description": "Learn React from the ground up - components, state, props, and hooks",
   "level": "Intermediate",
-  "duration": "6 weeks",
-  "rating": 4.9,
-  "students": 890,
+  "tags": ["React", "JavaScript", "Frontend"],
   "modules": [
     {
       "id": "module-1-react-basics",

@@ -8,13 +8,14 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import CourseCatalog from "./pages/CourseCatalog/CourseCatalog";
+import CourseDetail from "./pages/CourseDetail/CourseDetail";
 import LessonViewer from "./pages/LessonViewer/LessonViewer";
-import ProfileNew from "./pages/Profile/ProfileNew";
 import PeerReview from "./pages/PeerReview/PeerReview";
 import Rewards from "./pages/Rewards/Rewards";
 import Certificates from "./pages/Certificates/Certificates";
 import Discussion from "./pages/Discussion/Discussion";
 import DiscussionDetail from "./pages/DiscussionDetail/DiscussionDetail";
+import Profile from "./pages/Profile/Profile";
 import NotFound from "./pages/NotFound/NotFound";
 
 export const router = createBrowserRouter([
@@ -60,11 +61,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "courses",
-        Component: () => (
-          <ProtectedRoute>
-            <CourseCatalog />
-          </ProtectedRoute>
-        ),
+        Component: CourseCatalog,
+      },
+      {
+        path: "courses/:courseId",
+        Component: CourseDetail,
       },
       {
         path: "courses/:courseId/lessons/:lessonId",
@@ -118,7 +119,7 @@ export const router = createBrowserRouter([
         path: "profile",
         Component: () => (
           <ProtectedRoute>
-            <ProfileNew />
+            <Profile />
           </ProtectedRoute>
         ),
       },

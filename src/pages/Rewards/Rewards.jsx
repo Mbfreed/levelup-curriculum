@@ -1,5 +1,5 @@
 import React from "react";
-import { useCourse } from "../../hooks/useCourse";
+import { useCourse } from "../../contexts/CourseContext";
 import {
   Trophy,
   Zap,

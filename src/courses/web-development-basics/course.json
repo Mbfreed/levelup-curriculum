@@ -3,9 +3,7 @@
   "title": "Web Development Basics",
   "description": "Learn the fundamentals of web development including HTML, CSS, and JavaScript",
   "level": "Beginner",
-  "duration": "4 weeks",
-  "rating": 4.8,
-  "students": 1250,
+  "tags": ["HTML", "CSS", "JavaScript", "Web Development"],
   "modules": [
     {
       "id": "module-1-html-css",

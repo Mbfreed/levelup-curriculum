@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useUser } from "../../hooks/useUser";
+import { useUser } from "../../contexts/UserContext";
 
 const HomeRoute = () => {
   const { isAuthenticated } = useUser();

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+// import { useCourse } from "../../contexts/CourseContext";
 import {
   Search,
   Filter,
@@ -16,7 +17,8 @@ import Input from "../../components/Input/Input";
 import SearchAndFilter from "../../components/SearchAndFilter/SearchAndFilter";
 import TagList from "../../components/TagList/TagList";
 import styles from "./CourseCatalog.module.css";
-import { useCourse } from "../../hooks/useCourse";
+// import courses from "../../courses.json";
+import { useCourse } from "../../contexts/CourseContext";
 
 const CourseCatalog = () => {
   const { courses, enrollInCourse, getAllLessons } = useCourse();

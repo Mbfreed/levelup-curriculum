@@ -11,7 +11,7 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-import { useUser } from "../../hooks/useUser";
+import { useUser } from "../../contexts/UserContext";
 import styles from "./MobileMenu.module.css";
 
 const MobileMenu = ({ isOpen, onClose }) => {

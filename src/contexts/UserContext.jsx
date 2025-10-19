@@ -1,274 +1,180 @@
-import React, { useEffect, useState } from "react";
-import { supabase } from "../config/supabaseConfig";
-import { UserContext } from "./UserContextFile";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { auth, db } from "../config/firebaseConfig";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+
+const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Initialize auth state when app loads
   useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-
-        if (session?.user) {
-          // Fetch user profile from users table
-          const { data: userData, error } = await supabase
-            .from("users")
-            .select("*")
-            .eq("id", session.user.id)
-            .single();
-
-          if (userData) {
-            setUser(userData);
-            setIsAuthenticated(true);
-          } else if (error?.code !== "PGRST116") {
-            // PGRST116 = not found, which is ok for new users
-            console.error("Error fetching user:", error);
-          }
-        }
-      } catch (error) {
-        console.error("Auth initialization error:", error);
-      }
-    };
-
-    initializeAuth();
-
-    // Subscribe to auth state changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
-        // Fetch or verify user profile
-        const { data: userData } = await supabase
-          .from("users")
-          .select("*")
-          .eq("id", session.user.id)
-          .single();
-
-        if (userData) {
-          setUser(userData);
-          setIsAuthenticated(true);
-        }
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        const userData = await fetchUserDetails(currentUser.uid);
+        setUser(userData);
+        setIsAuthenticated(true);
       } else {
         setUser(null);
         setIsAuthenticated(false);
       }
     });
 
-    return () => subscription?.unsubscribe();
+    return () => unsubscribe();
   }, []);
 
-  const register = async (fullName, username, email, password) => {
-    setIsLoading(true);
+  const updateUser = (userData) => {
+    setUser((prev) => ({ ...prev, ...userData }));
+  };
+
+  const uploadUserDetails = async (userData) => {
     try {
-      // Sign up with Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-            username: username,
-          },
-        },
-      });
-
-      if (authError) {
-        return { success: false, error: authError.message };
-      }
-
-      if (!authData.user) {
-        return {
-          success: false,
-          error: "Registration failed. Please try again.",
-        };
-      }
-
-      // Create user profile in users table
-      const { error: profileError } = await supabase.from("users").insert([
-        {
-          id: authData.user.id,
-          email: email,
-          full_name: fullName,
-          username: username,
-          total_points: 0,
-          current_level: 1,
-        },
-      ]);
-
-      if (profileError) {
-        console.error("Error creating user profile:", profileError);
-        return {
-          success: false,
-          error: "Failed to create user profile. Please try again.",
-        };
-      }
-
-      // Fetch and set user data
-      const { data: userData } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", authData.user.id)
-        .single();
-
-      if (userData) {
-        setUser(userData);
-        setIsAuthenticated(true);
-      }
-
-      return { success: true };
+      await setDoc(doc(db, "users", userData.uid), userData);
     } catch (error) {
-      console.error("Register error:", error);
-      return { success: false, error: error.message || "Registration failed" };
-    } finally {
-      setIsLoading(false);
+      console.log(error);
+    }
+  };
+
+  const fetchUserDetails = async (userId) => {
+    try {
+      const docSnap = await getDoc(doc(db, "users", userId));
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        return docSnap.data();
+      } else {
+        console.log("No such document!");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const login = async (email, password) => {
     setIsLoading(true);
     try {
-      const { data: authData, error: authError } =
-        await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-      if (authError) {
-        return { success: false, error: authError.message };
-      }
-
-      if (!authData.user) {
-        return { success: false, error: "Login failed. Please try again." };
-      }
-
-      // Fetch user profile
-      const { data: userData, error: userError } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", authData.user.id)
-        .single();
-
-      if (userError) {
-        console.error("Error fetching user:", userError);
-        return {
-          success: false,
-          error: "Failed to load user profile. Please try again.",
-        };
-      }
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      const userData = await fetchUserDetails(user.uid);
+      console.log(userData);
 
       setUser(userData);
       setIsAuthenticated(true);
       return { success: true };
     } catch (error) {
-      console.error("Login error:", error);
-      return { success: false, error: error.message || "Login failed" };
+      return { success: false, error: error.code };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const register = async (name, email, password) => {
+    setIsLoading(true);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      const userData = {
+        uid: user.uid,
+        name: name,
+        email: email,
+        avatar: null,
+        level: "Beginner",
+        exp: 0,
+        coins: 0,
+        streak: 0,
+        joinedDate: user.metadata.creationTime,
+        totalLessonsCompleted: 0,
+        totalCoursesCompleted: 0,
+      };
+
+      console.log("User is Registered successfully");
+
+      await uploadUserDetails(userData);
+
+      console.log("User details uploaded to Firestore");
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.code };
     } finally {
       setIsLoading(false);
     }
   };
 
   const logout = async () => {
-    setIsLoading(true);
+    setIsLoading(false);
     try {
-      const { error } = await supabase.auth.signOut();
-
-      if (error) {
-        console.error("Logout error:", error);
-      }
-
+      await signOut(auth);
       setUser(null);
       setIsAuthenticated(false);
-      return { success: true };
     } catch (error) {
-      console.error("Logout error:", error);
-      return { success: false, error: error.message };
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const updateUser = async (updates) => {
-    if (!user) return;
-
-    try {
-      const { error } = await supabase
-        .from("users")
-        .update(updates)
-        .eq("id", user.id);
-
-      if (error) {
-        console.error("Error updating user:", error);
-        return { success: false, error: error.message };
-      }
-
-      setUser((prev) => (prev ? { ...prev, ...updates } : null));
-      return { success: true };
-    } catch (error) {
-      console.error("Update user error:", error);
-      return { success: false, error: error.message };
-    }
+  const addExp = (amount) => {
+    setUser((prev) => (prev ? { ...prev, exp: prev.exp + amount } : null));
   };
 
-  const addPoints = async (points) => {
-    if (!user) return;
-
-    const newTotalPoints = user.total_points + points;
-    const newLevel = Math.floor(newTotalPoints / 500) + 1;
-
-    try {
-      const { error } = await supabase
-        .from("users")
-        .update({
-          total_points: newTotalPoints,
-          current_level: newLevel,
-        })
-        .eq("id", user.id);
-
-      if (error) {
-        console.error("Error adding points:", error);
-        return { success: false, error: error.message };
-      }
-
-      setUser((prev) =>
-        prev
-          ? { ...prev, total_points: newTotalPoints, current_level: newLevel }
-          : null
-      );
-
-      return { success: true, newLevel, newTotalPoints };
-    } catch (error) {
-      console.error("Add points error:", error);
-      return { success: false, error: error.message };
-    }
+  const addCoins = (amount) => {
+    setUser((prev) => (prev ? { ...prev, coins: prev.coins + amount } : null));
   };
 
-  // Map database user to component format
-  const mappedUser = user ? {
-    ...user,
-    // Map database fields to component expected fields
-    name: user.full_name || user.username || "User",
-    level: user.current_level || 1,
-    exp: user.total_points || 0,
-    coins: user.total_points || 0, // Using total_points as coins
-    streak: 0, // Default to 0, can be added to DB later
-  } : null;
+  const levelUp = (newLevel, newExp) => {
+    setUser((prev) =>
+      prev ? { ...prev, level: newLevel, exp: newExp } : null
+    );
+  };
+
+  const updateStreak = (streak) => {
+    setUser((prev) => (prev ? { ...prev, streak } : null));
+  };
+
+  const setLoading = (loading) => {
+    setIsLoading(loading);
+  };
 
   const value = {
-    user: mappedUser,
+    user,
     isAuthenticated,
     isLoading,
     login,
     register,
     logout,
     updateUser,
-    addPoints,
+    addExp,
+    addCoins,
+    levelUp,
+    updateStreak,
+    setLoading,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+};
+
+export const useUser = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider");
+  }
+  return context;
 };

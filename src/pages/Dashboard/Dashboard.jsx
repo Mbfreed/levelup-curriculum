@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../../hooks/useUser";
-import { useCourse } from "../../hooks/useCourse";
+import { useUser } from "../../contexts/UserContext";
+import { useCourse } from "../../contexts/CourseContext";
 import { Trophy, Coins, Flame, Star } from "lucide-react";
 import WelcomeSection from "../../components/Dashboard/WelcomeSection";
 import StatsGrid from "../../components/Dashboard/StatsGrid";
@@ -14,11 +14,6 @@ const Dashboard = () => {
   const { user } = useUser();
   const { courses, enrollInCourse } = useCourse();
   const navigate = useNavigate();
-
-  // Handle loading state
-  if (!user) {
-    return <div>Loading...</div>;
-  }
 
   const enrolledCourses = courses.filter((course) => course.isEnrolled);
   const recentCourses = courses.slice(0, 3);

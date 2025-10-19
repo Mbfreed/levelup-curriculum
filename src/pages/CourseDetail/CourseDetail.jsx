@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useCourse } from "../../hooks/useCourse";
+import { useCourse } from "../../contexts/CourseContext";
 import {
   Clock,
   Users,

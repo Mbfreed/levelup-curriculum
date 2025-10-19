@@ -3,9 +3,7 @@
   "title": "Advanced JavaScript",
   "description": "Master advanced JavaScript concepts including async programming, modules, and modern ES6+ features",
   "level": "Advanced",
-  "duration": "8 weeks",
-  "rating": 4.7,
-  "students": 650,
+  "tags": ["JavaScript", "Advanced", "Async Programming"],
   "modules": [
     {
       "id": "module-1-es6-features",

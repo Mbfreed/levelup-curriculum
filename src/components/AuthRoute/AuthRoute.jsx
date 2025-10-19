@@ -1,9 +1,10 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
-import { useUser } from "../../hooks/useUser";
+import { Navigate, useLocation } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
 
 const AuthRoute = ({ children }) => {
   const { isAuthenticated } = useUser();
+  const location = useLocation();
 
   // If user is authenticated, redirect to dashboard
   if (isAuthenticated) {
