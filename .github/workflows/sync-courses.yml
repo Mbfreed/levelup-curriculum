@@ -1,0 +1,31 @@
+name: Sync Courses to Supabase
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/courses/**'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Trigger Supabase Edge Function - Sync Courses
+        run: |
+          curl -X POST https://lonsuwvdmtoinrhbytzn.supabase.co/functions/v1/sync-courses \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            --fail
+        
+      - name: Log sync completion
+        if: success()
+        run: echo "✅ Courses successfully synced to Supabase"
+        
+      - name: Log sync failure
+        if: failure()
+        run: echo "❌ Failed to sync courses. Please check the Edge Function logs."
