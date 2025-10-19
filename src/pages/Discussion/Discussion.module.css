@@ -446,3 +446,34 @@
     align-items: stretch;
   }
 }
+
+.comingSoonCard {
+  padding: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.comingSoonContent {
+  text-align: center;
+}
+
+.comingSoonContent svg {
+  color: #d1d5db;
+  margin-bottom: 24px;
+}
+
+.comingSoonContent h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #6b7280;
+  margin: 0 0 12px 0;
+}
+
+.comingSoonContent p {
+  font-size: 16px;
+  color: #9ca3af;
+  margin: 0;
+  max-width: 400px;
+}
