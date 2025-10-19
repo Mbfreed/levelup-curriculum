@@ -15,6 +15,11 @@ const Dashboard = () => {
   const { courses, enrollInCourse } = useCourse();
   const navigate = useNavigate();
 
+  // Handle loading state
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
   const enrolledCourses = courses.filter((course) => course.isEnrolled);
   const recentCourses = courses.slice(0, 3);
 

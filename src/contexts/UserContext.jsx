@@ -248,8 +248,19 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Map database user to component format
+  const mappedUser = user ? {
+    ...user,
+    // Map database fields to component expected fields
+    name: user.full_name || user.username || "User",
+    level: user.current_level || 1,
+    exp: user.total_points || 0,
+    coins: user.total_points || 0, // Using total_points as coins
+    streak: 0, // Default to 0, can be added to DB later
+  } : null;
+
   const value = {
-    user,
+    user: mappedUser,
     isAuthenticated,
     isLoading,
     login,
