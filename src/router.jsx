@@ -6,16 +6,15 @@ import HomeRoute from "./components/HomeRoute/HomeRoute";
 import Landing from "./pages/Landing/Landing";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import CourseCatalog from "./pages/CourseCatalog/CourseCatalog";
-import CourseDetail from "./pages/CourseDetail/CourseDetail";
-import LessonViewer from "./pages/LessonViewer/LessonViewer";
+import DashboardNew from "./pages/Dashboard/DashboardNew";
+import CourseCatalogNew from "./pages/CourseCatalog/CourseCatalogNew";
+import LessonViewerNew from "./pages/LessonViewer/LessonViewerNew";
+import ProfileNew from "./pages/Profile/ProfileNew";
 import PeerReview from "./pages/PeerReview/PeerReview";
 import Rewards from "./pages/Rewards/Rewards";
 import Certificates from "./pages/Certificates/Certificates";
 import Discussion from "./pages/Discussion/Discussion";
 import DiscussionDetail from "./pages/DiscussionDetail/DiscussionDetail";
-import Profile from "./pages/Profile/Profile";
 import NotFound from "./pages/NotFound/NotFound";
 
 export const router = createBrowserRouter([
@@ -55,23 +54,23 @@ export const router = createBrowserRouter([
         path: "dashboard",
         Component: () => (
           <ProtectedRoute>
-            <Dashboard />
+            <DashboardNew />
           </ProtectedRoute>
         ),
       },
       {
         path: "courses",
-        Component: CourseCatalog,
-      },
-      {
-        path: "courses/:courseId",
-        Component: CourseDetail,
+        Component: () => (
+          <ProtectedRoute>
+            <CourseCatalogNew />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "courses/:courseId/lessons/:lessonId",
         Component: () => (
           <ProtectedRoute>
-            <LessonViewer />
+            <LessonViewerNew />
           </ProtectedRoute>
         ),
       },
@@ -119,7 +118,7 @@ export const router = createBrowserRouter([
         path: "profile",
         Component: () => (
           <ProtectedRoute>
-            <Profile />
+            <ProfileNew />
           </ProtectedRoute>
         ),
       },

@@ -1,7 +1,7 @@
 import React from "react";
 import { RouterProvider } from "react-router-dom";
 import { UserProvider } from "./contexts/UserContext";
-import { CourseProvider } from "./contexts/CourseContext";
+import { CourseProvider } from "./contexts/CourseContextSupabase";
 import { router } from "./router.jsx";
 import "./App.css";
 
