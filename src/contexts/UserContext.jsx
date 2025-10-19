@@ -68,17 +68,16 @@ export const UserProvider = ({ children }) => {
     setIsLoading(true);
     try {
       // Sign up with Supabase Auth
-      const { data: authData, error: authError } =
-        await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              full_name: fullName,
-              username: username,
-            },
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            username: username,
           },
-        });
+        },
+      });
 
       if (authError) {
         return { success: false, error: authError.message };
